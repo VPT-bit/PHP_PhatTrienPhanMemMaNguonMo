@@ -17,7 +17,7 @@ if (isset($_GET['Ma_san_pham'])) {
           <script>
               setTimeout(function() {
                   document.getElementById("alert-box").remove();
-                  window.location.href = "index.php?page=list_product";
+                  window.location.href = "index_admin.php?page=list_product";
               }, 1000);
           </script>';
     } else {
@@ -52,12 +52,12 @@ $total_pages = ceil($total_rows / $rows_per_page);
     <div class="card-header py-3 d-flex justify-content-between align-items-center">
         <h6 class="m-0 font-weight-bold text-primary">Danh sách sản phẩm</h6>
 
-        <form action="index.php" method="get" class="form-inline">
+        <form action="index_admin.php" method="get" class="form-inline">
             <input type="hidden" name="page" value="list_product">
             <input type="text" name="search" class="form-control" placeholder="Tìm tên sản phẩm..." value="<?php echo trim($search_result); ?>">
             <button type="submit" class="btn btn-primary ml-2">Tìm</button>
         </form>
-        <a href="index.php?page=add_product">Thêm sản phẩm</a>
+        <a href="index_admin.php?page=add_product">Thêm sản phẩm</a>
     </div>
 
     <div class="card-body">
@@ -103,8 +103,8 @@ $total_pages = ceil($total_rows / $rows_per_page);
                                 ?>
                             </td>
                             <td>
-                                <a href="index.php?page=edit_product&id=<?php echo $row['Ma_san_pham']; ?>" class="btn btn-sm btn-warning">Sửa</a>
-                                <a href="index.php?page=list_product&Ma_san_pham=<?php echo $row['Ma_san_pham']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn xoá sản phẩm này?')">Xoá</a>
+                                <a href="index_admin.php?page=edit_product&id=<?php echo $row['Ma_san_pham']; ?>" class="btn btn-sm btn-warning">Sửa</a>
+                                <a href="index_admin.php?page=list_product&Ma_san_pham=<?php echo $row['Ma_san_pham']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn xoá sản phẩm này?')">Xoá</a>
                             </td>
                         </tr>
                     <?php
@@ -121,7 +121,7 @@ $total_pages = ceil($total_rows / $rows_per_page);
                     <li class="page-item <?php if ($current_page <= 1) echo 'disabled'; ?>">
                         <?php
                         $prev_page = $current_page - 1;
-                        $prev_link = "index.php?page=list_product&page_num=$prev_page";
+                        $prev_link = "index_admin.php?page=list_product&page_num=$prev_page";
                         if ($search_result != '') $prev_link .= "&search=" . $search_result;
                         ?>
                         <a class="page-link" href="<?php echo $prev_link; ?>" tabindex="-1">Trước</a>
@@ -130,7 +130,7 @@ $total_pages = ceil($total_rows / $rows_per_page);
                     <!-- Các số trang -->
                     <?php
                     for ($p = 1; $p <= $total_pages; $p++) {
-                        $link = "index.php?page=list_product&page_num=$p";
+                        $link = "index_admin.php?page=list_product&page_num=$p";
                         if ($search_result != '') $link .= "&search=" . $search_result;
 
                         $active = ($p == $current_page) ? 'active' : '';
@@ -142,7 +142,7 @@ $total_pages = ceil($total_rows / $rows_per_page);
                     <li class="page-item <?php if ($current_page >= $total_pages) echo 'disabled'; ?>">
                         <?php
                         $next_page = $current_page + 1;
-                        $next_link = "index.php?page=list_product&page_num=$next_page";
+                        $next_link = "index_admin.php?page=list_product&page_num=$next_page";
                         if ($search_result != '') $next_link .= "&search=" . $search_result;
                         ?>
                         <a class="page-link" href="<?php echo $next_link; ?>">Sau</a>

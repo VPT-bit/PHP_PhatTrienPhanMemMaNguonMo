@@ -108,6 +108,6 @@ if (isset($_POST['submit'])) {
         </div>
 
         <button type="submit" name="submit" class="btn btn-primary">Thêm sản phẩm</button>
-        <a href="index.php?page=list_product">Về trang sản phẩm</a>
+        <a href="index_admin.php?page=list_product">Về trang sản phẩm</a>
     </form>
 </div>
