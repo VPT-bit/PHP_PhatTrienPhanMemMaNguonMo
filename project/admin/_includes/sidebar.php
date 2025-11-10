@@ -4,7 +4,7 @@
   <!-- Sidebar - Brand -->
   <a
     class="sidebar-brand d-flex align-items-center justify-content-center"
-    href="index.php">
+    href="index_admin.php">
     <div class="sidebar-brand-icon rotate-n-15">
       <i class="fas fa-laugh-wink"></i>
     </div>
@@ -16,7 +16,7 @@
 
   <!-- Nav Item - Dashboard -->
   <li class="nav-item active">
-    <a class="nav-link" href="index.php">
+    <a class="nav-link" href="index_admin.php">
       <i class="fas fa-fw fa-tachometer-alt"></i>
       <span>Thống kê</span></a>
   </li>
@@ -47,7 +47,7 @@
         <h6 class="collapse-header">Sản phẩm:</h6>
         <a
           class="collapse-item"
-          href="index.php?page=list_product">Danh sách sản phẩm</a>
+          href="index_admin.php?page=list_product">Danh sách sản phẩm</a>
         <a class="collapse-item" href="product_list.php">Danh sách loại sản phẩm</a>
         <a class="collapse-item" href="product_list.php">Danh sách thương hiệu</a>
       </div>
