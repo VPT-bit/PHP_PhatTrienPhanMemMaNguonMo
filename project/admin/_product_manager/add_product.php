@@ -17,7 +17,7 @@ $result_ncc = mysqli_query($conn, $query_ncc);
 
 // Xử lý submit form
 if (isset($_POST['submit'])) {
-    $ten_sp = $_POST['Ten_san_pham'];
+    $ten_sp = trim($_POST['Ten_san_pham']);
     $ma_loai = $_POST['Ma_loai'];
     $so_luong = $_POST['So_luong'];
     $don_gia = $_POST['Don_gia'];
@@ -30,15 +30,21 @@ if (isset($_POST['submit'])) {
         move_uploaded_file($_FILES['Hinh_anh']['tmp_name'], __DIR__ . '/../_images/' . $hinh_anh);
     }
 
+    //Kiểm tra trùng
+    $query_duplicate = "SELECT Ten_san_pham, Ma_san_pham from san_pham where Ten_san_pham = '$ten_sp'";
+    $query_duplicate_result = mysqli_query($conn, $query_duplicate);
+    $duplicate_result = mysqli_fetch_assoc($query_duplicate_result);
 
-
-    $insert = "INSERT INTO san_pham (Ma_san_pham, Ten_san_pham, Ma_loai, So_luong, Don_gia, Ma_nha_cung_cap, Mo_ta, Hinh_anh)
-               VALUES ('$new_sp', '$ten_sp', '$ma_loai', $so_luong, $don_gia, '$ma_ncc', '$mo_ta', '$hinh_anh' )";
-
-    if (mysqli_query($conn, $insert)) {
-        echo '<div class="alert alert-success">Thêm sản phẩm thành công! Mã SP: ' . $new_sp . '</div>';
+    if (mysqli_num_rows($query_duplicate_result) > 0) {
+        echo '<div class="alert alert-danger">Sản phẩm đã tồn tại! Mã SP: ' . $duplicate_result['Ma_san_pham'] . '</div>';
     } else {
-        echo '<div class="alert alert-danger">Lỗi: ' . mysqli_error($conn) . '</div>';
+        $insert = "INSERT INTO san_pham (Ma_san_pham, Ten_san_pham, Ma_loai, So_luong, Don_gia, Ma_nha_cung_cap, Mo_ta, Hinh_anh)
+               VALUES ('$new_sp', '$ten_sp', '$ma_loai', $so_luong, $don_gia, '$ma_ncc', '$mo_ta', '$hinh_anh' )";
+        if (mysqli_query($conn, $insert)) {
+            echo '<div class="alert alert-success">Thêm sản phẩm thành công! Mã SP: ' . $new_sp . '</div>';
+        } else {
+            echo '<div class="alert alert-danger">Lỗi: ' . mysqli_error($conn) . '</div>';
+        }
     }
 }
 ?>
