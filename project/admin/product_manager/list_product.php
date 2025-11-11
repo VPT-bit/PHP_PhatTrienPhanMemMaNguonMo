@@ -132,6 +132,7 @@ $filter_ncc = isset($_GET['filter_ncc']) ? $_GET['filter_ncc'] : '';
                         <th>Đơn giá</th>
                         <th>Mã NCC</th>
                         <th>Mô tả</th>
+                        <th>Ngày thêm</th>
                         <th>Hình ảnh</th>
                         <th>Hành động</th>
                     </tr>
@@ -152,6 +153,7 @@ $filter_ncc = isset($_GET['filter_ncc']) ? $_GET['filter_ncc'] : '';
                             <td class="text-start" style="word-break: break-word; max-width: 200px;">
                                 <?php echo $row['Mo_ta']; ?>
                             </td>
+                            <td><?php echo $row['Ngay_tao']; ?></td>
                             <td style="text-align:center;">
                                 <?php
                                 $imagePath = "_images/" . $row['Hinh_anh'];
