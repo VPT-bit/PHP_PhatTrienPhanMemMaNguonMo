@@ -4,16 +4,17 @@ if (isset($_GET['Ma_san_pham'])) {
     $id = $_GET['Ma_san_pham'];
 
     // Xóa chi tiết hóa đơn liên quan
-    $delete_details = "DELETE FROM chi_tiet_hoa_don WHERE Ma_san_pham='$id'";
-    mysqli_query($conn, $delete_details);
+    // $delete_details = "DELETE FROM chi_tiet_hoa_don WHERE Ma_san_pham='$id'";
+    // mysqli_query($conn, $delete_details);
+
     // Lấy tên ảnh của sản phẩm
     $query_image = "SELECT Hinh_anh FROM san_pham WHERE Ma_san_pham = '$id'";
     $result_query_image = mysqli_query($conn, $query_image);
     if ($row_image = mysqli_fetch_assoc($result_query_image)) {
         $file_name = $row_image['Hinh_anh'];
         $path = __DIR__ . "/../_images/" . $file_name;
-        if (file_exists($path)) {
-            unlink($path); // xóa file
+        if (!empty($file_name) && file_exists($path)) {
+            unlink($path);
         }
     }
 
@@ -22,13 +23,12 @@ if (isset($_GET['Ma_san_pham'])) {
     if (mysqli_query($conn, $delete_product)) {
         echo '<div id="alert-box" class="alert alert-success"
           style="position:fixed; top:20px; right:20px; z-index:9999;">
-          Xoá thành công
           </div>
           <script>
               setTimeout(function() {
                   document.getElementById("alert-box").remove();
                   window.location.href = "index_admin.php?page=list_product";
-              }, 2000);
+              }, );
           </script>';
     } else {
         echo "Lỗi xóa sản phẩm: " . mysqli_error($conn);
@@ -57,6 +57,7 @@ FROM san_pham sp
 LEFT JOIN loai_san_pham lsp ON sp.Ma_loai = lsp.Ma_loai
 LEFT JOIN nha_cung_cap ncc ON sp.Ma_nha_cung_cap = ncc.Ma_nha_cung_cap
 $where_search
+ORDER BY CAST(SUBSTRING(sp.Ma_san_pham, 3) AS UNSIGNED) ASC
 LIMIT $start, $rows_per_page
 ";
 $result_to_show = mysqli_query($conn, $query_to_show);
