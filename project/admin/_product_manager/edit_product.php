@@ -12,7 +12,7 @@ $query_LSP_result = mysqli_query($conn, $query_LSP);
 
 // Xử lý submit form
 if (isset($_POST['submit'])) {
-    $ten = $_POST['Ten_san_pham'];
+    $ten = trim($_POST['Ten_san_pham']);
     $loai = $_POST['Ma_loai'];
     $sl = $_POST['So_luong'];
     $gia = $_POST['Don_gia'];
@@ -40,8 +40,15 @@ if (isset($_POST['submit'])) {
         $row_old = mysqli_fetch_assoc($result_query_image);
         $hinh_anh = $row_old['Hinh_anh'];
     }
+    //Kiểm tra trùng
+    $query_duplicate = "SELECT Ten_san_pham, Ma_san_pham from san_pham where Ten_san_pham = '$ten' and Ma_san_pham !='$id_detail'";
+    $query_duplicate_result = mysqli_query($conn, $query_duplicate);
+    $duplicate_result = mysqli_fetch_assoc($query_duplicate_result);
 
-    $query_update_detail = "
+    if (mysqli_num_rows($query_duplicate_result) > 0) {
+        echo '<div class="alert alert-danger">Tên sản phẩm đã tồn tại! Mã SP: ' . $duplicate_result['Ma_san_pham'] . '</div>';
+    } else {
+        $query_update_detail = "
     UPDATE san_pham 
     SET 
         Ten_san_pham = '$ten',
@@ -53,16 +60,17 @@ if (isset($_POST['submit'])) {
         Hinh_anh = '$hinh_anh'
     WHERE Ma_san_pham = '$id_detail' ";
 
-    $result_update = mysqli_query($conn, $query_update_detail);
-    if ($result_update) {
-        echo '
+        $result_update = mysqli_query($conn, $query_update_detail);
+        if ($result_update) {
+            echo '
           <script>
               setTimeout(function() {
                   window.location.href = "index_admin.php?page=edit_product&id=' . $id_detail . '";
               },);
           </script>';
-    } else {
-        echo "Lỗi cập nhật sản phẩm: " . mysqli_error($conn);
+        } else {
+            echo "Lỗi cập nhật sản phẩm: " . mysqli_error($conn);
+        }
     }
 }
 ?>
