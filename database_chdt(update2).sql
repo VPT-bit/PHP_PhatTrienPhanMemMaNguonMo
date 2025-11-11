@@ -86,7 +86,7 @@ INSERT INTO san_pham VALUES
 CREATE TABLE khach_hang (
     Ma_khach_hang VARCHAR(10) PRIMARY KEY,
     Ten_khach_hang VARCHAR(100) NOT NULL,
-    Phai TINYINT(1),
+    Phai TINYINT(1), -- 0 = nữ, 1 = nam
     Dia_chi VARCHAR(200),
     Dien_thoai VARCHAR(20),
     Email VARCHAR(100)
