@@ -48,8 +48,8 @@
         <a
           class="collapse-item"
           href="index_admin.php?page=list_product">Danh sách sản phẩm</a>
-        <a class="collapse-item" href="product_list.php">Danh sách loại sản phẩm</a>
-        <a class="collapse-item" href="product_list.php">Danh sách thương hiệu</a>
+        <a class="collapse-item" href="index_admin.php?page=list_product_category">Danh sách loại sản phẩm</a>
+        <a class="collapse-item" href="index_admin.php?page=list_product_brand">Danh sách thương hiệu</a>
       </div>
     </div>
   </li>
