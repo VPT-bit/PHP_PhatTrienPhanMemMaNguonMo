@@ -57,6 +57,8 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
             include('_product_manager/add_product.php');
           } elseif ($page == 'edit_product') {
             include('./_product_manager/edit_product.php');
+          } elseif ($page == 'list_product_category') {
+            include('./_product_manager/list_product_category.php');
           } else {
             include('./_includes/404_error.php');
           }
