@@ -1719,9 +1719,16 @@ pre code {
   width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  flex: 1 1 auto; /* chiếm hết không gian còn lại */
+  min-height: 400px; /* giữ chiều cao tối thiểu */
 }
 .table-responsive > .table-bordered {
   border: 0;
+}
+.pagination-wrapper {
+  display: flex;
+  justify-content: center; /* căn giữa */
+  margin-top: 15px; /* khoảng cách với bảng */
 }
 .form-control {
   display: block;
@@ -4238,6 +4245,8 @@ input[type="submit"].btn-block {
   border-top: 0;
 }
 .card-body {
+  display: flex;
+  flex-direction: column; /* sắp xếp table + phân trang theo chiều dọc */
   flex: 1 1 auto;
   min-height: 1px;
   padding: 1.25rem;
