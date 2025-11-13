@@ -31,6 +31,8 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
   <link
     href="../_assets/admin/css/sb-admin-2.min.css"
     rel="stylesheet" />
+
+
 </head>
 
 <body id="page-top">
@@ -81,6 +83,12 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
             include('./user_manager/add_user_employee.php');
           } elseif ($page == 'edit_user_employee') {
             include('./user_manager/edit_user_employee.php');
+          } elseif ($page == 'list_bill') {
+            include('./revenue_manager/list_bill.php');
+          } elseif ($page == 'list_bill_detail') {
+            include('./revenue_manager/list_bill_detail.php');
+          } elseif ($page == 'add_bill') {
+            include('./revenue_manager/add_bill.php');
           } else {
             include('./_includes/404_error.php');
           }
@@ -122,6 +130,9 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
   <!-- Page level custom scripts -->
   <script src="../_assets/admin/js/demo/chart-area-demo.js"></script>
   <script src="../_assets/admin/js/demo/chart-pie-demo.js"></script>
+  <!-- jQuery UI for autocomplete -->
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
 </body>
 
 </html>

@@ -95,7 +95,7 @@
       data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Hoá đơn:</h6>
-        <a class="collapse-item" href="index_admin.php?page=list_user">Danh sách hoá đơn</a>
+        <a class="collapse-item" href="index_admin.php?page=list_bill">Danh sách hoá đơn</a>
       </div>
     </div>
   </li>
