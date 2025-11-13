@@ -32,6 +32,26 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
     href="../_assets/admin/css/sb-admin-2.min.css"
     rel="stylesheet" />
 
+  <!-- Bootstrap core JavaScript-->
+  <script src="../_assets/admin/vendor/jquery/jquery.min.js"></script>
+  <script src="../_assets/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="../_assets/admin/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="../_assets/admin/js/sb-admin-2.min.js"></script>
+
+  <!-- Nếu có dashboard dùng biểu đồ -->
+  <script src="../_assets/admin/vendor/chart.js/Chart.min.js"></script>
+  <script src="../_assets/admin/js/demo/chart-area-demo.js"></script>
+  <script src="../_assets/admin/js/demo/chart-pie-demo.js"></script>
+
+  <!-- jQuery UI cho autocomplete -->
+  <link rel="stylesheet" href="../_assets/admin/custom_js/jquery-ui.css">
+  <script src="../_assets/admin/custom_js/jquery-ui.min.js"></script>
+
+
 
 </head>
 
@@ -114,25 +134,7 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
   <!-- Logout Modal-->
   <?php include('_includes/logout_modal.php') ?>
 
-  <!-- Bootstrap core JavaScript-->
-  <script src="../_assets/admin/vendor/jquery/jquery.min.js"></script>
-  <script src="../_assets/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Core plugin JavaScript-->
-  <script src="../_assets/admin/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-  <!-- Custom scripts for all pages-->
-  <script src="../_assets/admin/js/sb-admin-2.min.js"></script>
-
-  <!-- Page level plugins -->
-  <script src="../_assets/admin/vendor/chart.js/Chart.min.js"></script>
-
-  <!-- Page level custom scripts -->
-  <script src="../_assets/admin/js/demo/chart-area-demo.js"></script>
-  <script src="../_assets/admin/js/demo/chart-pie-demo.js"></script>
-  <!-- jQuery UI for autocomplete -->
-  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
 </body>
 
 </html>
