@@ -9,7 +9,15 @@ if (isset($_POST['submit'])) {
     $dien_thoai = $_POST['Dien_thoai'];
     $gioi_tinh = $_POST['Phai'];
     $chuc_vu = $_POST['Chuc_vu'];
-    $query_update_detail = "
+    //Kiểm tra trùng
+    $query_duplicate = "SELECT Dien_thoai, Ma_khach_hang from khach_hang where Dien_thoai = '$dien_thoai'";
+    $query_duplicate_result = mysqli_query($conn, $query_duplicate);
+    $duplicate_result = mysqli_fetch_assoc($query_duplicate_result);
+
+    if (mysqli_num_rows($query_duplicate_result) > 0) {
+        echo '<div class="alert alert-danger">Số điện thoại đã tồn tại! Mã nhân viên: ' . $duplicate_result['Ma_khach_hang'] . '</div>';
+    } else {
+        $query_update_detail = "
     UPDATE nhan_vien 
     SET 
         Ten_nhan_vien = '$ten',
@@ -18,16 +26,17 @@ if (isset($_POST['submit'])) {
         Dien_thoai = '$dien_thoai',
         Chuc_vu = '$chuc_vu'
     WHERE Ma_nhan_vien = '$id_detail' ";
-    $result_update = mysqli_query($conn, $query_update_detail);
-    if ($result_update) {
-        echo '
+        $result_update = mysqli_query($conn, $query_update_detail);
+        if ($result_update) {
+            echo '
           <script>
               setTimeout(function() {
                   window.location.href = "index_admin.php?page=edit_user_employee&id=' . $id_detail . '";
               },);
           </script>';
-    } else {
-        echo "Lỗi cập nhật Nhân viên: " . mysqli_error($conn);
+        } else {
+            echo "Lỗi cập nhật Nhân viên: " . mysqli_error($conn);
+        }
     }
 }
 

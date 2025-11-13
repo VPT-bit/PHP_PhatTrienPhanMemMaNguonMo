@@ -13,13 +13,21 @@ if (isset($_POST['submit'])) {
     $gioi_tinh = $_POST['Gioi_tinh'];
     $dien_thoai = trim($_POST['Dien_thoai']);
     $email = trim($_POST['Email']);
+    //Kiểm tra trùng
+    $query_duplicate = "SELECT Dien_thoai, Ma_khach_hang from khach_hang where Dien_thoai = '$dien_thoai'";
+    $query_duplicate_result = mysqli_query($conn, $query_duplicate);
+    $duplicate_result = mysqli_fetch_assoc($query_duplicate_result);
 
-    $insert = "INSERT INTO khach_hang 
-               VALUES ('$new_id', '$ten', '$gioi_tinh', '$dia_chi', '$dien_thoai','$email')";
-    if (mysqli_query($conn, $insert)) {
-        echo '<div class="alert alert-success">Thêm Khách hàng thành công! Mã KH: ' . $new_id . '</div>';
+    if (mysqli_num_rows($query_duplicate_result) > 0) {
+        echo '<div class="alert alert-danger">Số điện thoại đã tồn tại! Mã khách hàng: ' . $duplicate_result['Ma_khach_hang'] . '</div>';
     } else {
-        echo '<div class="alert alert-danger">Lỗi: ' . mysqli_error($conn) . '</div>';
+        $insert = "INSERT INTO khach_hang 
+               VALUES ('$new_id', '$ten', '$gioi_tinh', '$dia_chi', '$dien_thoai','$email')";
+        if (mysqli_query($conn, $insert)) {
+            echo '<div class="alert alert-success">Thêm Khách hàng thành công! Mã khách hàng: ' . $new_id . '</div>';
+        } else {
+            echo '<div class="alert alert-danger">Lỗi: ' . mysqli_error($conn) . '</div>';
+        }
     }
 }
 ?>
