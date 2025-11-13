@@ -39,8 +39,7 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
   <!-- Core plugin JavaScript-->
   <script src="../_assets/admin/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-  <!-- Custom scripts for all pages-->
-  <script src="../_assets/admin/js/sb-admin-2.min.js"></script>
+
 
   <!-- Nếu có dashboard dùng biểu đồ -->
   <script src="../_assets/admin/vendor/chart.js/Chart.min.js"></script>
@@ -138,3 +137,6 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
 </body>
 
 </html>
+
+<!-- Custom scripts for all pages-->
+<script src="../_assets/admin/js/sb-admin-2.min.js"></script>
