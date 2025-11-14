@@ -2,6 +2,17 @@
 // --- Xoá hoá đơn ---
 if (isset($_GET['Ma_hoa_don'])) {
     $id = $_GET['Ma_hoa_don'];
+    //Cập nhật số lượng sản phẩm từ mã sản phẩm
+    $query_CTHD = "select Ma_san_pham, So_luong from chi_tiet_hoa_don where Ma_hoa_don = '$id'";
+    $query_CTHD_result = mysqli_query($conn, $query_CTHD);
+    while ($row = mysqli_fetch_assoc($query_CTHD_result)) {
+        $maSP = $row['Ma_san_pham'];
+        $soLuong = $row['So_luong'];
+        $query_update_SoLuongSP = "update san_pham set So_luong = So_luong + $soLuong where Ma_san_pham = '$maSP'";
+        if (!mysqli_query($conn, $query_update_SoLuongSP)) {
+            echo "Lỗi biến query_update_SoLuongSP: " . mysqli_error($conn);
+        }
+    }
     // Xóa hoá đơn
     $delete_product_cat = "DELETE FROM hoa_don WHERE Ma_hoa_don='$id'";
     if (mysqli_query($conn, $delete_product_cat)) {
