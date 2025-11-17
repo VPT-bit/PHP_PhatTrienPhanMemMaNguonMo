@@ -1,100 +1,68 @@
-<?php # Script 9.5 - register.php #2
-// This script performs an INSERT query to add a record to the users table.
-
+<?php 
 $page_title = 'Register';
-include ('includes/header.html');
+include ('includes/header.php');
+include('includes/ket_noi.php');
 
-// Check for form submission:
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-	require ('../mysqli_connect.php'); // Connect to the db.
-		
-	$errors = array(); // Initialize an error array.
-	
-	// Check for a first name:
-	if (empty($_POST['first_name'])) {
-		$errors[] = 'You forgot to enter your first name.';
-	} else {
-		$fn = mysqli_real_escape_string($dbc, trim($_POST['first_name']));
-	}
-	
-	// Check for a last name:
-	if (empty($_POST['last_name'])) {
-		$errors[] = 'You forgot to enter your last name.';
-	} else {
-		$ln = mysqli_real_escape_string($dbc, trim($_POST['last_name']));
-	}
-	
-	// Check for an email address:
-	if (empty($_POST['email'])) {
-		$errors[] = 'You forgot to enter your email address.';
-	} else {
-		$e = mysqli_real_escape_string($dbc, trim($_POST['email']));
-	}
-	
-	// Check for a password and match against the confirmed password:
-	if (!empty($_POST['pass1'])) {
-		if ($_POST['pass1'] != $_POST['pass2']) {
-			$errors[] = 'Your password did not match the confirmed password.';
-		} else {
-			$p = mysqli_real_escape_string($dbc, trim($_POST['pass1']));
-		}
-	} else {
-		$errors[] = 'You forgot to enter your password.';
-	}
-	
-	if (empty($errors)) { // If everything's OK.
-	
-		// Register the user in the database...
-		
-		// Make the query:
-		$q = "INSERT INTO users (first_name, last_name, email, pass, registration_date) VALUES ('$fn', '$ln', '$e', SHA1('$p'), NOW() )";		
-		$r = @mysqli_query ($dbc, $q); // Run the query.
-		if ($r) { // If it ran OK.
-		
-			// Print a message:
-			echo '<h1>Thank you!</h1>
-		<p>You are now registered. In Chapter 12 you will actually be able to log in!</p><p><br /></p>';	
-		
-		} else { // If it did not run OK.
-			
-			// Public message:
-			echo '<h1>System Error</h1>
-			<p class="error">You could not be registered due to a system error. We apologize for any inconvenience.</p>'; 
-			
-			// Debugging message:
-			echo '<p>' . mysqli_error($dbc) . '<br /><br />Query: ' . $q . '</p>';
-						
-		} // End of if ($r) IF.
-		
-		mysqli_close($dbc); // Close the database connection.
+    // 1. Lấy dữ liệu từ form
+    $ten_khach_hang = $_POST["ten_khach_hang"];
+    $phai = $_POST["phai"];
+    $dia_chi = $_POST["dia_chi"];
+    $dien_thoai = $_POST["dien_thoai"];
+    $email = $_POST["email"];
+    $username = $_POST["username"];
+    $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
 
-		// Include the footer and quit the script:
-		include ('includes/footer.html'); 
-		exit();
-		
-	} else { // Report the errors.
-	
-		echo '<h1>Error!</h1>
-		<p class="error">The following error(s) occurred:<br />';
-		foreach ($errors as $msg) { // Print each error.
-			echo " - $msg<br />\n";
-		}
-		echo '</p><p>Please try again.</p><p><br /></p>';
-		
-	} // End of if (empty($errors)) IF.
-	
-	mysqli_close($dbc); // Close the database connection.
+    // 2. Tạo mã khách hàng tự động
+    $ma_khach_hang = uniqid('KH');
 
-} // End of the main Submit conditional.
+    // 3. Tạo ngày tạo tài khoản
+    $ngay_tao = date("Y-m-d H:i:s");
+
+    // 4. SQL thêm khách hàng
+    $sql_kh = "
+        INSERT INTO khach_hang (Ma_khach_hang, Ten_khach_hang, Phai, Dia_chi, Dien_thoai, Email)
+        VALUES ('$ma_khach_hang', '$ten_khach_hang', '$phai', '$dia_chi', '$dien_thoai', '$email')
+    ";
+
+    // 5. SQL thêm tài khoản với quyền Khách hàng Q3
+    $ma_quyen = 'Q3';
+    $trang_thai = 1;
+    $sql_tk = "
+        INSERT INTO tai_khoan (Ten_dang_nhap, Mat_khau, Ma_quyen, Ma_khach_hang, Trang_thai, Ngay_tao)
+        VALUES ('$username', '$password', '$ma_quyen', '$ma_khach_hang', '$trang_thai', '$ngay_tao')
+    ";
+
+    // 6. Thực hiện transaction
+    mysqli_begin_transaction($conn);
+    try {
+        mysqli_query($conn, $sql_kh);
+        mysqli_query($conn, $sql_tk);
+        mysqli_commit($conn);
+
+        echo "<div class='alert alert-success'>Đăng ký thành công! <a href='login.php'>Đăng nhập</a></div>";
+    } catch (Exception $e) {
+        mysqli_rollback($conn);
+        echo "<div class='alert alert-danger'>Lỗi: " . $e->getMessage() . "</div>";
+    }
+}
 ?>
-<h1>Register</h1>
-<form action="register.php" method="post">
-	<p>First Name: <input type="text" name="first_name" size="15" maxlength="20" value="<?php if (isset($_POST['first_name'])) echo $_POST['first_name']; ?>" /></p>
-	<p>Last Name: <input type="text" name="last_name" size="15" maxlength="40" value="<?php if (isset($_POST['last_name'])) echo $_POST['last_name']; ?>" /></p>
-	<p>Email Address: <input type="text" name="email" size="20" maxlength="60" value="<?php if (isset($_POST['email'])) echo $_POST['email']; ?>"  /> </p>
-	<p>Password: <input type="password" name="pass1" size="10" maxlength="20" value="<?php if (isset($_POST['pass1'])) echo $_POST['pass1']; ?>"  /></p>
-	<p>Confirm Password: <input type="password" name="pass2" size="10" maxlength="20" value="<?php if (isset($_POST['pass2'])) echo $_POST['pass2']; ?>"  /></p>
-	<p><input type="submit" name="submit" value="Register" /></p>
+
+<form method="POST">
+    <h2>Đăng ký</h2>
+    Họ và tên: <input type="text" name="ten_khach_hang" required><br>
+    Giới tính:
+    <select name="phai">
+        <option value="1">Nam</option>
+        <option value="0">Nữ</option>
+    </select><br>
+    Địa chỉ: <input type="text" name="dia_chi" required><br>
+    Điện thoại: <input type="text" name="dien_thoai" required><br>
+    Email: <input type="email" name="email" required><br>
+    Username: <input type="text" name="username" required><br>
+    Password: <input type="password" name="password" required><br>
+    <button type="submit">Đăng ký</button>
 </form>
+
 <?php include ('includes/footer.html'); ?>

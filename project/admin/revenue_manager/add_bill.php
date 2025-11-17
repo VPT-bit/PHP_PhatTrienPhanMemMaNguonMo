@@ -1,23 +1,30 @@
 <?php
 include(__DIR__ . '/../_includes/config.php');
-// --- Tạo mã hoá đơn tự động ---
-$query_max = "SELECT MAX(CAST(SUBSTRING(Ma_hoa_don, 3) AS UNSIGNED)) AS max_id FROM hoa_don";
-$result_max = mysqli_query($conn, $query_max);
-$row_max = mysqli_fetch_assoc($result_max);
-$new_id = 'HD' . ($row_max['max_id'] + 1);
-$now_id = $new_id;
+
+// ============================================
+// KHỞI TẠO MÃ NHÂN VIÊN TRƯỚC (QUAN TRỌNG!)
+// ============================================
+$maNV = '';
+if (!empty($_SESSION['Ma_nhan_vien'])) {
+    $maNV = $_SESSION['Ma_nhan_vien'];
+}
+
+// ============================================
+// XỬ LÝ AJAX (ĐẶT TRƯỚC KIỂM TRA QUYỀN)
+// ============================================
 if (isset($_GET['ajax'])) {
     $type = isset($_GET['type']) ? $_GET['type'] : '';
     $term = isset($_GET['term']) ? $_GET['term'] : '';
     $data = array();
+
     if ($type === 'customer') {
         $sql = "select Dien_thoai,Ten_khach_hang from khach_hang where Dien_thoai like '%$term%' limit 5";
         $result = mysqli_query($conn, $sql);
         while ($row = mysqli_fetch_assoc($result)) {
             $data[] = array(
-                "label" => $row['Dien_thoai'], // sẽ hiển thị trong dropdown
-                "value" => $row['Dien_thoai'],  // sẽ điền vào input khi chọn
-                "name" => $row['Ten_khach_hang']    // để điền vào ô readonly
+                "label" => $row['Dien_thoai'],
+                "value" => $row['Dien_thoai'],
+                "name" => $row['Ten_khach_hang']
             );
         }
     } elseif ($type === 'product') {
@@ -31,9 +38,9 @@ if (isset($_GET['ajax'])) {
             );
         }
     } elseif ($type === 'check_exist') {
-        $field = $_GET['field']; // ví dụ: Dien_thoai, Ten_san_pham,...
+        $field = $_GET['field'];
         $term = $_GET['term'];
-        // kiểm tra tương ứng tuỳ ô nhập
+
         if ($field === 'Dien_thoai') {
             $sql = "SELECT 1 FROM khach_hang WHERE Dien_thoai = '$term'";
         } elseif ($field === 'Ten_san_pham[]') {
@@ -44,51 +51,101 @@ if (isset($_GET['ajax'])) {
         echo json_encode(['exists' => mysqli_num_rows($result) > 0]);
         exit;
     }
+
     echo json_encode($data);
     exit;
 }
 
+// ============================================
+// KIỂM TRA QUYỀN
+// ============================================
+if (!isset($_SESSION['ma_quyen']) || ($_SESSION['ma_quyen'] != 'Q1' && $_SESSION['ma_quyen'] != 'Q2')) {
+    include(__DIR__ . '/../_includes/index_404.php');
+    exit();
+}
+
+// ============================================
+// TẠO MÃ HÓA ĐƠN TỰ ĐỘNG
+// ============================================
+$query_max = "SELECT MAX(CAST(SUBSTRING(Ma_hoa_don, 3) AS UNSIGNED)) AS max_id FROM hoa_don";
+$result_max = mysqli_query($conn, $query_max);
+$row_max = mysqli_fetch_assoc($result_max);
+$new_id = 'HD' . ($row_max['max_id'] + 1);
+$now_id = $new_id;
+
+// ============================================
+// XỬ LÝ SUBMIT FORM
+// ============================================
 if (isset($_POST['submit'])) {
+    // DEBUG - Kiểm tra mã nhân viên
+    if (empty($maNV)) {
+        echo '<div class="alert alert-danger">Lỗi: Không tìm thấy mã nhân viên! Vui lòng đăng nhập lại.</div>';
+        exit();
+    }
+
     $dien_thoai = isset($_POST['Dien_thoai']) ? $_POST['Dien_thoai'] : '';
     $products = isset($_POST['Ten_san_pham']) ? $_POST['Ten_san_pham'] : [];
     $quantities = isset($_POST['So_luong']) ? $_POST['So_luong'] : [];
-    $maNV = 'NV1';
-    $query_maKH = "select Ma_khach_hang from khach_hang where Dien_thoai = '$dien_thoai'";
-    $query_maKH_result = mysqli_query($conn, $query_maKH);
-    $maKH = mysqli_fetch_assoc($query_maKH_result);
-    $maKH = $maKH['Ma_khach_hang'];
 
-    $query_add_bill = "insert into hoa_don (Ma_hoa_don, Ma_khach_hang, Ma_nhan_vien, Trang_thai, Loai_don_hang, Tong_tien) values ('$new_id', '$maKH', '$maNV', 1, 0, 0)";
+    // Lấy mã khách hàng
+    $query_maKH = "SELECT Ma_khach_hang FROM khach_hang WHERE Dien_thoai = '$dien_thoai'";
+    $query_maKH_result = mysqli_query($conn, $query_maKH);
+
+    if (mysqli_num_rows($query_maKH_result) == 0) {
+        echo '<div class="alert alert-danger">Lỗi: Không tìm thấy khách hàng!</div>';
+        exit();
+    }
+
+    $maKH_row = mysqli_fetch_assoc($query_maKH_result);
+    $maKH = $maKH_row['Ma_khach_hang'];
+
+    // Kiểm tra mã nhân viên có tồn tại trong database không
+    $check_nv = "SELECT Ma_nhan_vien FROM nhan_vien WHERE Ma_nhan_vien = '$maNV'";
+    $result_check_nv = mysqli_query($conn, $check_nv);
+
+    if (mysqli_num_rows($result_check_nv) == 0) {
+        echo '<div class="alert alert-danger">Lỗi: Mã nhân viên không hợp lệ! (Mã: ' . htmlspecialchars($maNV) . ')</div>';
+        exit();
+    }
+
+    // Thêm hóa đơn
+    $query_add_bill = "INSERT INTO hoa_don (Ma_hoa_don, Ma_khach_hang, Ma_nhan_vien, Trang_thai, Loai_don_hang, Tong_tien) 
+                       VALUES ('$new_id', '$maKH', '$maNV', 1, 0, 0)";
     $query_add_bill_result = mysqli_query($conn, $query_add_bill);
+
     if ($query_add_bill_result) {
         echo '<div class="alert alert-success">Thêm hoá đơn thành công! Mã hoá đơn: ' . $new_id . '</div>';
-    } else {
-        echo '<div class="alert alert-danger">Lỗi: ' . mysqli_error($conn) . '</div>';
-    }
-    for ($i = 0; $i < count($products); $i++) {
-        $tenSP = $products[$i];
-        $soLuong = (int)$quantities[$i];
-        // Lấy mã sản phẩm, đơn giá, số lượng từ tên
-        $query_MaSP = "select Ma_san_pham, Don_gia from san_pham where Ten_san_pham = '$tenSP'";
-        $query_MaSP_result = mysqli_query($conn, $query_MaSP);
-        $query_MaSP_result_show = mysqli_fetch_assoc($query_MaSP_result);
-        $maSP = $query_MaSP_result_show['Ma_san_pham'];
-        $don_gia = $query_MaSP_result_show['Don_gia'];
-        //Cập nhật số lượng sản phẩm từ mã sản phẩm
-        $query_update_SoLuongSP = "update san_pham set So_luong = greatest(So_luong - $soLuong, 0) where Ma_san_pham = '$maSP'";
-        if (!mysqli_query($conn, $query_update_SoLuongSP)) {
-            echo "Lỗi biến query_update_SoLuongSP: " . mysqli_error($conn);
-        }
-        //Thêm chi tiết hoá đơn
-        $query_add_CTHD = "INSERT INTO chi_tiet_hoa_don (Ma_hoa_don, Ma_san_pham, So_luong, Don_gia) VALUES ('$now_id','$maSP','$soLuong','$don_gia')";
 
-        mysqli_query($conn, $query_add_CTHD);
-        // if (!mysqli_query($conn,  $query_add_CTHD)) {
-        //     echo "Lỗi biến query_add_CTHD: " . mysqli_error($conn);
-        // }
+        // Thêm chi tiết hóa đơn
+        for ($i = 0; $i < count($products); $i++) {
+            $tenSP = $products[$i];
+            $soLuong = (int)$quantities[$i];
+
+            // Lấy mã sản phẩm, đơn giá
+            $query_MaSP = "SELECT Ma_san_pham, Don_gia FROM san_pham WHERE Ten_san_pham = '$tenSP'";
+            $query_MaSP_result = mysqli_query($conn, $query_MaSP);
+            $query_MaSP_result_show = mysqli_fetch_assoc($query_MaSP_result);
+            $maSP = $query_MaSP_result_show['Ma_san_pham'];
+            $don_gia = $query_MaSP_result_show['Don_gia'];
+
+            // Cập nhật số lượng sản phẩm
+            $query_update_SoLuongSP = "UPDATE san_pham SET So_luong = GREATEST(So_luong - $soLuong, 0) WHERE Ma_san_pham = '$maSP'";
+            if (!mysqli_query($conn, $query_update_SoLuongSP)) {
+                echo '<div class="alert alert-warning">Lỗi cập nhật số lượng sản phẩm: ' . mysqli_error($conn) . '</div>';
+            }
+
+            // Thêm chi tiết hóa đơn
+            $query_add_CTHD = "INSERT INTO chi_tiet_hoa_don (Ma_hoa_don, Ma_san_pham, So_luong, Don_gia) 
+                               VALUES ('$now_id','$maSP','$soLuong','$don_gia')";
+
+            if (!mysqli_query($conn, $query_add_CTHD)) {
+                echo '<div class="alert alert-warning">Lỗi thêm chi tiết hóa đơn: ' . mysqli_error($conn) . '</div>';
+            }
+        }
+    } else {
+        echo '<div class="alert alert-danger">Lỗi thêm hóa đơn: ' . mysqli_error($conn) . '</div>';
     }
 }
-
 ?>
 
 <h3>Thêm hoá đơn mới</h3>
@@ -252,6 +309,7 @@ if (isset($_POST['submit'])) {
                     });
                 }
             });
+
             // Kiểm tra khi blur (rời khỏi ô số lượng)
             $(document).on('blur', 'input[name="So_luong[]"]', function() {
                 var quantityInput = $(this);
@@ -274,44 +332,77 @@ if (isset($_POST['submit'])) {
                     quantityInput.focus();
                 }
             });
-        });
-        // Autocomplete cho khách hàng
-        $("#customer_search").autocomplete({
-            source: function(request, response) {
-                $.ajax({
-                    url: "revenue_manager/add_bill.php",
-                    dataType: "json",
-                    type: 'GET',
-                    data: {
-                        ajax: 1,
-                        type: 'customer',
-                        term: request.term
-                    },
-                    success: function(data) {
-                        if (data.length === 0) {
-                            response([{
-                                label: "Không tồn tại",
-                                value: "",
-                                isNotFound: true
-                            }])
-                        } else {
-                            response(data);
-                        }
-                    }
-                });
-            },
-            minLength: 1,
-            select: function(event, ui) {
-                if (ui.item.isNotFound) {
-                    alert("Số điện thoại này không tồn tại trong database!");
-                    $(this).val("");
-                    $("#customer_name").val("");
-                    return false;
-                } else {
-                    $("#customer_name").val(ui.item.name);
-                }
-            }
-        });
 
+            // ========================================
+            // KIỂM TRA SỐ ĐIỆN THOẠI KHI BLUR (MỚI THÊM)
+            // ========================================
+            $('#customer_search').on('blur', function() {
+                var phoneInput = $(this);
+                var phoneNumber = phoneInput.val().trim();
+
+                if (phoneNumber === '') return;
+
+                // Kiểm tra xem đã chọn từ autocomplete chưa (tên khách hàng đã được điền)
+                if ($('#customer_name').val() === '') {
+                    $.ajax({
+                        url: 'revenue_manager/add_bill.php',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {
+                            ajax: 1,
+                            type: 'check_exist',
+                            field: 'Dien_thoai',
+                            term: phoneNumber
+                        },
+                        success: function(res) {
+                            if (!res.exists) {
+                                phoneInput.addClass('invalid');
+                                alert('Số điện thoại "' + phoneNumber + '" không tồn tại trong cơ sở dữ liệu!');
+                                phoneInput.val('');
+                                $('#customer_name').val('');
+                            }
+                        }
+                    });
+                }
+            });
+
+            // Autocomplete cho khách hàng
+            $("#customer_search").autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        url: "revenue_manager/add_bill.php",
+                        dataType: "json",
+                        type: 'GET',
+                        data: {
+                            ajax: 1,
+                            type: 'customer',
+                            term: request.term
+                        },
+                        success: function(data) {
+                            if (data.length === 0) {
+                                response([{
+                                    label: "Không tồn tại",
+                                    value: "",
+                                    isNotFound: true
+                                }])
+                            } else {
+                                response(data);
+                            }
+                        }
+                    });
+                },
+                minLength: 1,
+                select: function(event, ui) {
+                    if (ui.item.isNotFound) {
+                        alert("Số điện thoại này không tồn tại trong database!");
+                        $(this).val("");
+                        $("#customer_name").val("");
+                        return false;
+                    } else {
+                        $("#customer_name").val(ui.item.name);
+                    }
+                }
+            });
+        });
     });
 </script>

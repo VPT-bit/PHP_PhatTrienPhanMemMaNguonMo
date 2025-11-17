@@ -29,6 +29,32 @@ if (isset($_GET['Ma_hoa_don'])) {
         echo "Lỗi xóa hoá đơn: " . mysqli_error($conn);
     }
 }
+// Cập nhật trạng thái hoá đơn
+if (isset($_POST['Ma_hoa_don']) && isset($_POST['Trang_thai'])) {
+
+    $id = $_POST['Ma_hoa_don'];
+    $status = $_POST['Trang_thai'];
+
+    $sql = "UPDATE hoa_don SET Trang_thai = '$status' WHERE Ma_hoa_don = '$id'";
+
+    if (mysqli_query($conn, $sql)) {
+
+        echo '<div id="alert-box" class="alert alert-success"
+                style="position:fixed; top:20px; right:20px; z-index:9999;">
+
+              </div>
+
+              <script>
+                  setTimeout(function() {
+                      document.getElementById("alert-box").remove();
+                      window.location.href = "index_admin.php?page=list_bill";
+                  });
+              </script>';
+    } else {
+        echo '<div class="alert alert-danger">Lỗi: ' . mysqli_error($conn) . '</div>';
+    }
+}
+
 
 // --- Tìm dữ liệu hoá đơn ---
 $search_result = isset($_GET['search']) ? trim($_GET['search']) : '';
@@ -97,14 +123,24 @@ $total_pages = ceil($total_rows / $rows_per_page);
                             <td><?php echo $i; ?></td>
                             <td><?php echo $row['Ma_hoa_don']; ?></td>
                             <td><?php echo $row['Ma_khach_hang']; ?></td>
-                            <td><?php echo $row['Ma_nhan_vien']; ?></td>
+                            <?php if ($row['Ma_nhan_vien'] == null): ?>
+                                <td>Được đặt online</td>;
+                            <?php else: ?>
+                                <td><?php echo $row['Ma_nhan_vien']; ?></td>
+                            <?php endif; ?>
                             <td><?php echo $row['Ngay_tao']; ?></td>
                             <td><?php echo number_format($row['Tong_tien'], 0, ',', '.'); ?></td>
                             <?php
                             if ($row['Trang_thai'] == 0) {
-                                echo '<td class="text-danger">Chưa hoàn thành</td>';
-                            } else {
+                                echo '<td class="text-warning">Chờ xác nhận</td>';
+                            } elseif ($row['Trang_thai'] == 1) {
+                                echo '<td class="text-primary">Đã xác nhận</td>';
+                            } elseif ($row['Trang_thai'] == 2) {
+                                echo '<td class="text-info">Đã giao cho vận chuyển</td>';
+                            } elseif ($row['Trang_thai'] == 3) {
                                 echo '<td class="text-success">Đã hoàn thành</td>';
+                            } else {
+                                echo '<td class="text-danger">Đã huỷ</td>';
                             }
                             ?>
                             <?php
@@ -117,6 +153,21 @@ $total_pages = ceil($total_rows / $rows_per_page);
                             <td>
                                 <a href="index_admin.php?page=list_bill_detail&id=<?php echo $row['Ma_hoa_don']; ?>" class="btn btn-sm btn-warning">Chi tiết</a>
                                 <a href="index_admin.php?page=list_bill&Ma_hoa_don=<?php echo $row['Ma_hoa_don']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn xoá hoá đơn này?')">Xoá</a>
+                                <form method="POST" action="index_admin.php?page=list_bill" style="display:inline-block;">
+                                    <input type="hidden" name="Ma_hoa_don" value="<?php echo $row['Ma_hoa_don']; ?>">
+
+                                    <select name="Trang_thai" class="form-control form-control-sm"
+                                        onchange="this.form.submit()">
+
+                                        <option value="0" <?php echo $row['Trang_thai'] == 0 ? 'selected' : ''; ?>>Chờ xác nhận</option>
+                                        <option value="1" <?php echo $row['Trang_thai'] == 1 ? 'selected' : ''; ?>>Đã xác nhận</option>
+                                        <option value="2" <?php echo $row['Trang_thai'] == 2 ? 'selected' : ''; ?>>Đã giao cho vận chuyển</option>
+                                        <option value="3" <?php echo $row['Trang_thai'] == 3 ? 'selected' : ''; ?>>Đã hoàn thành</option>
+                                        <option value="4" <?php echo $row['Trang_thai'] == 4 ? 'selected' : ''; ?>>Đã huỷ</option>
+
+                                    </select>
+                                </form>
+
                             </td>
                         </tr>
                     <?php

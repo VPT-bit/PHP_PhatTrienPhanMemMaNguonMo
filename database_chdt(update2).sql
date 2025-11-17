@@ -1,7 +1,12 @@
 -- ===============================
 -- Database: CuaHangDienTu
 -- ===============================
-
+-- TK: admin
+-- MK: 1
+-- TK: nv
+-- MK: 1
+-- TK: kh
+-- MK: 1
 DROP DATABASE IF EXISTS CuaHangDienTu;
 CREATE DATABASE CuaHangDienTu;
 USE CuaHangDienTu;
@@ -93,16 +98,8 @@ CREATE TABLE khach_hang (
 );
 
 INSERT INTO khach_hang VALUES
-('KH1','Nguyễn Văn A',1,'Hà Nội','0912345678','a.nguyen@gmail.com'),
-('KH2','Trần Thị B',0,'TP HCM','0987654321','b.tran@yahoo.com'),
-('KH3','Lê Văn C',1,'Đà Nẵng','0932123456','c.le@gmail.com'),
-('KH4','Phạm Minh D',1,'Hải Phòng','0977123456','d.pham@gmail.com'),
-('KH5','Nguyễn Thị E',0,'Cần Thơ','0909123123','e.nguyen@gmail.com'),
-('KH6','Vũ Quốc F',1,'Huế','0911333444','f.vu@gmail.com'),
-('KH7','Bùi Thị G',0,'Nha Trang','0966777888','g.bui@gmail.com'),
-('KH8','Phan Văn H',1,'Đồng Nai','0933444555','h.phan@gmail.com'),
-('KH9','Đỗ Thị I',0,'TP HCM','0988111222','i.do@gmail.com'),
-('KH10','Lý Văn K',1,'Hà Nội','0911999888','k.ly@gmail.com');
+('KH691b06a2', 'Phạm Bá Dương', 1, '1', '2', '2');
+
 
 -- ===============================
 -- Bảng nhân viên
@@ -117,16 +114,9 @@ CREATE TABLE nhan_vien (
 );
 
 INSERT INTO nhan_vien VALUES
-('NV1','Phạm Văn D',1,'Hà Nội','0911222333','Quản lý'),
-('NV2','Hoàng Thị E',0,'TP HCM','0988112233','Nhân viên bán hàng'),
-('NV3','Lê Văn F',1,'Đà Nẵng','0911333555','Kế toán'),
-('NV4','Nguyễn Thị G',0,'Hà Nội','0922333444','Nhân viên kho'),
-('NV5','Trần Văn H',1,'TP HCM','0933555666','Nhân viên bán hàng'),
-('NV6','Phạm Thị I',0,'Đà Nẵng','0944777888','Lễ tân'),
-('NV7','Bùi Văn K',1,'Huế','0955666777','Nhân viên giao hàng'),
-('NV8','Vũ Thị L',0,'Cần Thơ','0966777889','Nhân viên CSKH'),
-('NV9','Nguyễn Văn M',1,'Hải Phòng','0977888999','Quản lý chi nhánh'),
-('NV10','Đoàn Thị N',0,'Nha Trang','0988999000','Nhân viên bán hàng');
+('NV691b0e11465b5', 'Phạm Bá Dương', 1, 'Hà Nội', '0911222333', 'Quản lý'),
+('NV691b067a', 'Phạm Bá Dương', 0, '1', '1', 'Nhân viên');
+
 
 -- ===============================
 -- Bảng hóa đơn
@@ -137,27 +127,13 @@ CREATE TABLE hoa_don (
     Ma_nhan_vien VARCHAR(10),
     Ngay_tao DATETIME DEFAULT CURRENT_TIMESTAMP,
     Tong_tien DECIMAL(12,2) NOT NULL,
-	Trang_thai TINYINT(1) DEFAULT 0, -- 0 = Chưa hoàn thành, 1 = Hoàn thành
-	Loai_don_hang TINYINT(1) DEFAULT 0, -- 0 = offline, 1 = online
+	Trang_thai TINYINT(1) DEFAULT 0, -- 0 = Chờ xác nhận, 1 = đã xác nhận , 2 = đã giao cho vận chuyển , 3 = đã hoàn thành, 4 = đã huỷ
+	Loai_don_hang TINYINT(1) DEFAULT 0, -- 0 = offline, 1 = online 
     FOREIGN KEY (Ma_khach_hang) REFERENCES khach_hang(Ma_khach_hang)
         ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (Ma_nhan_vien) REFERENCES nhan_vien(Ma_nhan_vien)
         ON DELETE CASCADE ON UPDATE CASCADE
 );
-
-INSERT INTO hoa_don 
-(Ma_hoa_don, Ma_khach_hang, Ma_nhan_vien, Ngay_tao, Tong_tien, Trang_thai, Loai_don_hang) VALUES
-('HD1','KH1','NV1',NOW(),32000000,1,0),
-('HD2','KH2','NV2',NOW(),30000000,0,1),
-('HD3','KH3','NV3',NOW(),19000000,1,0),
-('HD4','KH4','NV4',NOW(),45000000,0,1),
-('HD5','KH5','NV5',NOW(),22000000,1,0),
-('HD6','KH6','NV6',NOW(),55000000,0,1),
-('HD7','KH7','NV7',NOW(),21000000,1,0),
-('HD8','KH8','NV8',NOW(),37000000,0,1),
-('HD9','KH9','NV9',NOW(),32000000,1,0),
-('HD10','KH10','NV10',NOW(),7000000,0,1);
-
 
 -- ===============================
 -- Bảng chi tiết hóa đơn
@@ -173,18 +149,6 @@ CREATE TABLE chi_tiet_hoa_don (
     FOREIGN KEY (Ma_san_pham) REFERENCES san_pham(Ma_san_pham)
         ON DELETE CASCADE ON UPDATE CASCADE
 );
-
-INSERT INTO chi_tiet_hoa_don VALUES
-('HD1','SP1',1,25000000),
-('HD1','SP3',1,7000000),
-('HD2','SP2',1,30000000),
-('HD3','SP6',1,19000000),
-('HD4','SP9',1,45000000),
-('HD5','SP5',1,22000000),
-('HD6','SP4',1,55000000),
-('HD7','SP7',1,21000000),
-('HD8','SP10',1,37000000),
-('HD9','SP8',1,32000000);
 
 CREATE TABLE quyen (
     Ma_quyen VARCHAR(10) PRIMARY KEY,
@@ -214,9 +178,19 @@ CREATE TABLE tai_khoan (
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 INSERT INTO tai_khoan VALUES
-('admin', '1', 'Q1', 'NV1', NULL, 1, NOW()),
-('nv_hoang', '1', 'Q2', 'NV2', NULL, 1, NOW()),
-('kh_nguyen', '1', 'Q3', NULL, 'KH1', 1, NOW());
+('admin', '$2y$10$hNQ5s4o0mb5tsEPhZC24E.WTM93TQhmmqE5Pnqr7.dvKCIns3t97m', 'Q1', 'NV691b0e11465b5', NULL, 1, NOW()),
+('kh', '$2y$10$HDdrjnzWowJyxnTHbmghXuCAlpAzRAOI648hKpvmZPBcT1a6lEf.y', 'Q3', NULL, 'KH691b06a2', 1, NOW()),
+('nv', ' $2y$10$Wu1zkENPxL2AbKOb6CeJcuFH.HItlZim93aWvIAYRJZ5FwK1OYTWm', 'Q2', 'NV691b067a', NULL, 1, NOW());
+
+
+
+CREATE TABLE `gio_hang` (
+  `id` int(11) NOT NULL,
+  `ma_khach_hang` varchar(50) NOT NULL,
+  `ma_san_pham` varchar(50) NOT NULL,
+  `so_luong` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 
 DELIMITER //
 

@@ -1,10 +1,3 @@
-<?php
-session_start();
-/* if (isset($_SESSION['thong_bao'])) {
-    echo '<div class="alert alert-success">' . $_SESSION['thong_bao'] . '</div>';
-    unset($_SESSION['thong_bao']);
-} */
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,6 +13,9 @@ $page_title = 'Danh sách điện thoại';
 include('includes/header.php');
 include('includes/ket_noi.php'); 
 
+// ========== LỌC THEO LOẠI ==========
+$ma_ncc = isset($_GET['ma_nha_cung_cap']) ? $_GET['ma_nha_cung_cap'] : '';
+
 // ========== PHÂN TRANG ==========
 $rowsPerPage = 8; // Số sản phẩm mỗi trang
 
@@ -30,14 +26,29 @@ $currentPage = $_GET['page'];
 
 $offset = ($currentPage - 1) * $rowsPerPage;
 
-// DANH SÁCH SẢN PHẨM CÓ PHÂN TRANG
-$sql = "SELECT Ma_san_pham, Ten_san_pham, So_luong, Don_gia, Mo_ta, Hinh_anh 
-        FROM san_pham 
-        LIMIT $offset, $rowsPerPage";
+// DANH SÁCH SẢN PHẨM CÓ PHÂN TRANG VÀ LỌC
+if (!empty($ma_ncc)) {
+    // CÓ LỌC THEO LOẠI
+    $sql = "SELECT Ma_san_pham, Ten_san_pham, So_luong, Don_gia, Mo_ta, Hinh_anh 
+            FROM san_pham 
+            WHERE Ma_nha_cung_cap = '$ma_ncc'
+            LIMIT $offset, $rowsPerPage";
+    
+    // Đếm theo loại
+    $sqlCount = "SELECT COUNT(*) as total FROM san_pham WHERE Ma_nha_cung_cap = '$ma_ncc'";
+} else {
+    // KHÔNG LỌC - HIỂN THỊ TẤT CẢ
+    $sql = "SELECT Ma_san_pham, Ten_san_pham, So_luong, Don_gia, Mo_ta, Hinh_anh 
+            FROM san_pham 
+            LIMIT $offset, $rowsPerPage";
+    
+    // Đếm tất cả
+    $sqlCount = "SELECT COUNT(*) as total FROM san_pham";
+}
+
 $result = $conn->query($sql);
 
 // Đếm tổng số sản phẩm để tính số trang
-$sqlCount = "SELECT COUNT(*) as total FROM san_pham";
 $resultCount = $conn->query($sqlCount);
 $rowCount = $resultCount->fetch_assoc();
 $numRows = $rowCount['total'];
@@ -72,11 +83,12 @@ $resultBanChay = $conn->query($sqlBanChay);
                 echo '<span>Giá: ' . number_format($rowBC['Don_gia'], 0, ',', '.') . ' VND</span><br>';
                 echo '<span>Đã bán: ' . htmlspecialchars($rowBC['Tong_da_ban']) . '</span><br>';
                 echo '<button class="btn btn-primary btn-sm" onclick="themVaoGio(\'' . $rowBC['Ma_san_pham'] . '\')">Thêm vào giỏ hàng</button>';
+
                 echo '</div>';
             }
             echo '</div>';
         } else {
-            echo '<p>Chưa có sản phẩm nào cả .</p>';
+            echo '<p>Chưa có sản phẩm nào cả.</p>';
         }
         ?>
     </div>
@@ -101,10 +113,12 @@ $resultBanChay = $conn->query($sqlBanChay);
                             echo '<span>Giá: ' . number_format($row['Don_gia'], 0, ',', '.') . ' VND</span><br>';
                             echo '<span>Số lượng: ' . htmlspecialchars($row['So_luong']) . '</span><br>';
                             echo '<p>' . htmlspecialchars(substr($row['Mo_ta'], 0, 60)) . '...</p>';
-                            echo '<button onclick="themVaoGio(\'' . $row['Ma_san_pham'] . '\')" class="btn btn-primary">Thêm vào giỏ hàng</button>';                            echo '</div>';
+                            echo '<button class="btn btn-primary btn-sm" onclick="themVaoGio(\'' . $row['Ma_san_pham'] . '\')">Thêm vào giỏ hàng</button>';
+
+                            echo '</div>';
                         }
                     } else {
-                        echo '<p>Hiện chưa có sản phẩm điện thoại nào.</p>';
+                        echo "<p>Hiện chưa có sản phẩm nào.</p>";
                     }
                     ?>
                 </div>
@@ -112,9 +126,12 @@ $resultBanChay = $conn->query($sqlBanChay);
                 <!-- PHÂN TRANG -->
                 <div class="pagination">
                     <?php
+                    // Tạo URL với tham số ma_loai (nếu có)
+                    $paramNCC = !empty($ma_ncc) ? "&ma_ncc=" . urlencode($ma_ncc) : "";
+                    
                     // Nút Back
                     if ($currentPage > 1) {
-                        echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($currentPage - 1) . "' class='page-btn'>« Back</a> ";
+                        echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($currentPage - 1) . $paramNCC . "' class='page-btn'>« Back</a> ";
                     }
 
                     // Hiển thị các trang
@@ -122,13 +139,13 @@ $resultBanChay = $conn->query($sqlBanChay);
                         if ($i == $currentPage) {
                             echo "<span class='page-current'>Trang $i</span> ";
                         } else {
-                            echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=$i' class='page-link'>Trang $i</a> ";
+                            echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=$i" . $paramNCC . "' class='page-link'>Trang $i</a> ";
                         }
                     }
 
                     // Nút Next
                     if ($currentPage < $maxPage) {
-                        echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($currentPage + 1) . "' class='page-btn'>Next »</a>";
+                        echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($currentPage + 1) . $paramNCC . "' class='page-btn'>Next »</a>";
                     }
                     ?>
                 </div>
@@ -142,7 +159,6 @@ $resultBanChay = $conn->query($sqlBanChay);
     include('includes/footer.html');
     ?>
 </body>
-
 <script src="./java/gio_hang.js"></script>
 
 </html>
