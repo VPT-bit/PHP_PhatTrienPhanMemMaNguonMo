@@ -1,12 +1,10 @@
 -- ===============================
 -- Database: CuaHangDienTu
 -- ===============================
--- TK: admin
--- MK: 1
--- TK: nv
--- MK: 1
--- TK: kh
--- MK: 1
+
+
+
+
 DROP DATABASE IF EXISTS CuaHangDienTu;
 CREATE DATABASE CuaHangDienTu;
 USE CuaHangDienTu;
@@ -127,8 +125,8 @@ CREATE TABLE hoa_don (
     Ma_nhan_vien VARCHAR(10),
     Ngay_tao DATETIME DEFAULT CURRENT_TIMESTAMP,
     Tong_tien DECIMAL(12,2) NOT NULL,
-	Trang_thai TINYINT(1) DEFAULT 0, -- 0 = Chờ xác nhận, 1 = đã xác nhận , 2 = đã giao cho vận chuyển , 3 = đã hoàn thành, 4 = đã huỷ
-	Loai_don_hang TINYINT(1) DEFAULT 0, -- 0 = offline, 1 = online 
+	Trang_thai TINYINT(1) DEFAULT 0, -- 0 = Chưa hoàn thành, 1 = Hoàn thành
+	Loai_don_hang TINYINT(1) DEFAULT 0, -- 0 = offline, 1 = online
     FOREIGN KEY (Ma_khach_hang) REFERENCES khach_hang(Ma_khach_hang)
         ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (Ma_nhan_vien) REFERENCES nhan_vien(Ma_nhan_vien)
