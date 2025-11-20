@@ -94,7 +94,7 @@ if (isset($_POST['submit'])) {
     <div class="row mb-3">
         <div class="col-md-4">
             <label>Số lượng:</label>
-            <input type="number" name="So_luong" class="form-control" value="<?php echo isset($_POST['So_luong']) ? htmlspecialchars($_POST['So_luong']) : '0'; ?>">
+            <input type="number" name="So_luong" class="form-control" value="<?php echo isset($_POST['So_luong']) ? htmlspecialchars($_POST['So_luong']) : ''; ?>">
         </div>
         <div class="col-md-4">
             <label>Đơn giá:</label>
@@ -113,7 +113,6 @@ if (isset($_POST['submit'])) {
         <label>Mô tả:</label>
         <textarea name="Mo_ta" class="form-control" rows="3"><?php echo isset($_POST['Mo_ta']) ? htmlspecialchars($_POST['Mo_ta']) : ''; ?></textarea>
     </div>
-
     <button type="submit" name="submit" class="btn btn-primary">Thêm sản phẩm</button>
     <a href="index_admin.php?page=list_product" class="btn btn-secondary">Về trang sản phẩm</a>
 </form>

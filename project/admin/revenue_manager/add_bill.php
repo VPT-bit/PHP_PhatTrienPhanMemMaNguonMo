@@ -110,7 +110,7 @@ if (isset($_POST['submit'])) {
 
     // Thêm hóa đơn
     $query_add_bill = "INSERT INTO hoa_don (Ma_hoa_don, Ma_khach_hang, Ma_nhan_vien, Trang_thai, Loai_don_hang, Tong_tien) 
-                       VALUES ('$new_id', '$maKH', '$maNV', 1, 0, 0)";
+                       VALUES ('$new_id', '$maKH', '$maNV', 3, 0, 0)";
     $query_add_bill_result = mysqli_query($conn, $query_add_bill);
 
     if ($query_add_bill_result) {

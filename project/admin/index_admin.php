@@ -4,7 +4,7 @@ include_once(__DIR__ . '/_includes/config.php');
 $page = isset($_GET['page']) ? $_GET['page'] : null;
 // Nếu chưa có page, redirect sang dashboard
 if (!$page) {
-  header('Location: index_admin.php?page=dashboard');
+  header('Location: index_admin.php?page=list_bill');
   exit();
 }
 // --- Mảng ánh xạ page => file ---
@@ -36,7 +36,11 @@ $pages = [
 ];
 // Kiểm tra page hợp lệ
 $isValidPage = isset($pages[$page]) && file_exists($pages[$page]);
-
+$q2_allowed_pages = [
+  'list_bill',
+  'list_bill_detail',
+  'add_bill'
+];
 
 // Kiểm tra đã đăng nhập chưa
 if (!isset($_SESSION['username'])) {
@@ -45,10 +49,23 @@ if (!isset($_SESSION['username'])) {
 }
 
 // Kiểm tra quyền
-if (!isset($_SESSION['ma_quyen']) || ($_SESSION['ma_quyen'] != 'Q1' && $_SESSION['ma_quyen'] != 'Q2')) {
+if (!isset($_SESSION['ma_quyen'])) {
   include('./_includes/index_404.php');
-  exit(); // dừng script để không load tiếp
+  exit();
 }
+
+if ($_SESSION['ma_quyen'] == 'Q2') {
+  // Q2 chỉ được phép truy cập các page trong danh sách
+  if (!in_array($page, $q2_allowed_pages)) {
+    include('./_includes/index_404.php');
+    exit();
+  }
+} elseif ($_SESSION['ma_quyen'] != 'Q1') {
+  // Những quyền khác ngoài Q1 và Q2 → 404
+  include('./_includes/index_404.php');
+  exit();
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -79,9 +96,7 @@ if (!isset($_SESSION['ma_quyen']) || ($_SESSION['ma_quyen'] != 'Q1' && $_SESSION
   <script src="../_assets/admin/vendor/jquery-easing/jquery.easing.min.js"></script>
 
   <!-- Nếu có dashboard dùng biểu đồ -->
-  <script src="../_assets/admin/vendor/chart.js/Chart.min.js"></script>
-  <script src="../_assets/admin/js/demo/chart-area-demo.js"></script>
-  <script src="../_assets/admin/js/demo/chart-pie-demo.js"></script>
+  <script src="../_assets/admin/custom_js/chart.js"></script>
 
   <!-- jQuery UI cho autocomplete -->
   <link rel="stylesheet" href="../_assets/admin/custom_js/jquery-ui.css">

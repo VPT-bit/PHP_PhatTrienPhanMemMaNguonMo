@@ -74,16 +74,16 @@ CREATE TABLE san_pham (
 );
 
 INSERT INTO san_pham VALUES
-('SP1','Samsung Galaxy S23','L1',50,25000000,'NCC1','Điện thoại cao cấp Samsung','test.jpg',NOW()),
-('SP2','iPhone 15','L1',30,30000000,'NCC2','Điện thoại Apple mới nhất','test.jpg',NOW()),
-('SP3','Sony WH-1000XM5','L3',40,7000000,'NCC3','Tai nghe chống ồn Sony','test.jpg',NOW()),
-('SP4','MacBook Pro 16','L2',20,55000000,'NCC2','Laptop cao cấp Apple','test.jpg',NOW()),
-('SP5','Sony Bravia 55inch','L4',10,22000000,'NCC3','Tivi 4K Sony','test.jpg',NOW()),
-('SP6','Xiaomi 13 Pro','L1',60,19000000,'NCC4','Điện thoại chụp ảnh đẹp','test.jpg',NOW()),
-('SP7','Oppo Find X7','L1',45,21000000,'NCC5','Flagship Oppo hiệu năng cao','test.jpg',NOW()),
-('SP8','Dell XPS 13','L2',25,32000000,'NCC9','Laptop mỏng nhẹ, pin tốt','test.jpg',NOW()),
-('SP9','Asus ROG Strix','L2',15,45000000,'NCC7','Laptop gaming mạnh mẽ','test.jpg',NOW()),
-('SP10','LG OLED 65inch','L4',12,37000000,'NCC6','Tivi OLED hiển thị cực nét','test.jpg',NOW());
+('SP1','Samsung Galaxy S23','L1',50,25000000,'NCC1','Điện thoại cao cấp Samsung','Samsung Galaxy S23.webp',NOW()),
+('SP2','iPhone 15','L1',30,30000000,'NCC2','Điện thoại Apple mới nhất','iPhone 15.jpg',NOW()),
+('SP3','Sony WH-1000XM5','L3',40,7000000,'NCC3','Tai nghe chống ồn Sony','Sony WH-1000XM5.png',NOW()),
+('SP4','MacBook Pro 16','L2',20,55000000,'NCC2','Laptop cao cấp Apple','MacBook Pro 16.jpg',NOW()),
+('SP5','Sony Bravia 55inch','L4',10,22000000,'NCC3','Tivi 4K Sony','Sony Bravia 55inch.webp',NOW()),
+('SP6','Xiaomi 13 Pro','L1',60,19000000,'NCC4','Điện thoại chụp ảnh đẹp','Xiaomi 13 Pro.jpg',NOW()),
+('SP7','Oppo Find X7','L1',45,21000000,'NCC5','Flagship Oppo hiệu năng cao','Oppo Find X7.webp',NOW()),
+('SP8','Dell XPS 13','L2',25,32000000,'NCC9','Laptop mỏng nhẹ, pin tốt','Dell XPS 13.jpg',NOW()),
+('SP9','Asus ROG Strix','L2',15,45000000,'NCC7','Laptop gaming mạnh mẽ','Asus ROG Strix.jpg',NOW()),
+('SP10','LG OLED 65inch','L4',12,37000000,'NCC6','Tivi OLED hiển thị cực nét','LG OLED 65inch.jpg',NOW());
 
 -- ===============================
 -- Bảng khách hàng
@@ -98,7 +98,7 @@ CREATE TABLE khach_hang (
 );
 
 INSERT INTO khach_hang VALUES
-('KH691b06a2', 'Phạm Bá Dương', 1, '1', '2', '2');
+('KH691b06a2', 'Phạm Bá Dương', 1, 'Đại học nha trang', '0389851543', 'duong.pb.64.cntt@ntu.edu.vn');
 
 
 -- ===============================
@@ -114,8 +114,8 @@ CREATE TABLE nhan_vien (
 );
 
 INSERT INTO nhan_vien VALUES
-('NV691b0e11465b5', 'Phạm Bá Dương', 1, 'Hà Nội', '0911222333', 'Quản lý'),
-('NV691b067a', 'Phạm Bá Dương', 0, '1', '1', 'Nhân viên');
+('NV691b0e11465b5', 'Phạm Bá Dương(admin)', 1, 'Nha trang', '0911222333', 'Quản lý'),
+('NV691b067a', 'Phạm Bá Dương(nhân viên)', 1, 'Nha Trang', '0911222334', 'Nhân viên');
 
 
 -- ===============================
@@ -134,7 +134,12 @@ CREATE TABLE hoa_don (
     FOREIGN KEY (Ma_nhan_vien) REFERENCES nhan_vien(Ma_nhan_vien)
         ON DELETE CASCADE ON UPDATE CASCADE
 );
-
+INSERT INTO `hoa_don` (`Ma_hoa_don`, `Ma_khach_hang`, `Ma_nhan_vien`, `Ngay_tao`, `Tong_tien`, `Trang_thai`, `Loai_don_hang`) VALUES
+('HD1', 'KH691b06a2', 'NV691b067a', '2025-11-18 04:12:02', 60000000.00, 3, 0),
+('HD2', 'KH691b06a2', 'NV691b067a', '2025-11-18 04:16:03', 262000000.00, 3, 0),
+('HD3', 'KH691b06a2', 'NV691b067a', '2025-11-18 04:16:56', 144000000.00, 3, 0),
+('HD4', 'KH691b06a2', 'NV691b067a', '2025-11-18 04:18:14', 184000000.00, 3, 0),
+('HD5', 'KH691b06a2', 'NV691b067a', '2025-11-18 04:18:49', 110000000.00, 3, 0);
 -- ===============================
 -- Bảng chi tiết hóa đơn
 -- ===============================
@@ -149,7 +154,20 @@ CREATE TABLE chi_tiet_hoa_don (
     FOREIGN KEY (Ma_san_pham) REFERENCES san_pham(Ma_san_pham)
         ON DELETE CASCADE ON UPDATE CASCADE
 );
-
+INSERT INTO `chi_tiet_hoa_don` (`Ma_hoa_don`, `Ma_san_pham`, `So_luong`, `Don_gia`) VALUES
+('HD1', 'SP2', 2, 30000000.00),
+('HD2', 'SP1', 2, 25000000.00),
+('HD2', 'SP3', 2, 7000000.00),
+('HD2', 'SP5', 2, 22000000.00),
+('HD2', 'SP8', 2, 32000000.00),
+('HD2', 'SP9', 2, 45000000.00),
+('HD3', 'SP6', 2, 19000000.00),
+('HD3', 'SP7', 2, 21000000.00),
+('HD3', 'SP8', 2, 32000000.00),
+('HD4', 'SP1', 2, 25000000.00),
+('HD4', 'SP10', 2, 37000000.00),
+('HD4', 'SP2', 2, 30000000.00),
+('HD5', 'SP4', 2, 55000000.00);
 CREATE TABLE quyen (
     Ma_quyen VARCHAR(10) PRIMARY KEY,
     Ten_quyen VARCHAR(50) NOT NULL,
@@ -178,9 +196,9 @@ CREATE TABLE tai_khoan (
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 INSERT INTO tai_khoan VALUES
-('admin', '$2y$10$hNQ5s4o0mb5tsEPhZC24E.WTM93TQhmmqE5Pnqr7.dvKCIns3t97m', 'Q1', 'NV691b0e11465b5', NULL, 1, NOW()),
-('kh', '$2y$10$HDdrjnzWowJyxnTHbmghXuCAlpAzRAOI648hKpvmZPBcT1a6lEf.y', 'Q3', NULL, 'KH691b06a2', 1, NOW()),
-('nv', ' $2y$10$Wu1zkENPxL2AbKOb6CeJcuFH.HItlZim93aWvIAYRJZ5FwK1OYTWm', 'Q2', 'NV691b067a', NULL, 1, NOW());
+('admin', '$2y$10$ap.471E4KMWgqLhyQc/o1OV0vgjP.u7zisKhyQae5M8DGHXK4fYZy', 'Q1', 'NV691b0e11465b5', NULL, 1, NOW()),
+('kh', '$2y$10$CorM3VxE6wGssOdNoHfPjOWbbhDbo79/ttSLYzyDD0wLdugf8.ms6', 'Q3', NULL, 'KH691b06a2', 1, NOW()),
+('nv', '$2y$10$r5ioJ6pQfOFkTMys3a3TaudE4cx06SMa0GUbrmqhbs/PnP.dt.2OS', 'Q2', 'NV691b067a', NULL, 1, NOW());
 
 
 
