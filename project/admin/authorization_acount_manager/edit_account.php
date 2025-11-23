@@ -43,7 +43,7 @@ if (isset($_POST['submit'])) {
 ?>
 
 <form method="post" action="">
-    <h3>Cập nhật tài khoản khách hàng</h3>
+    <h3>Cập nhật tài khoản</h3>
     <?php if ($sp = mysqli_fetch_assoc($query_detail_result)) { ?>
         <div class="row mb-3">
             <div class="col-md-12">

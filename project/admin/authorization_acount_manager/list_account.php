@@ -41,20 +41,20 @@ if (isset($_GET['Ten_dang_nhap'])) {
     }
 }
 
-// --- Tìm dữ liệu tài khoản ---
-$search_result = isset($_GET['search']) ? trim($_GET['search']) : '';
-$where_search = '';
-if ($search_result != '') {
-    $where_search = "WHERE Ten_dang_nhap LIKE '%$search_result%'";
-}
-
 // --- Phân trang ---
 $rows_per_page = 5;
 $current_page = isset($_GET['page_num']) ? (int)$_GET['page_num'] : 1;
 $start = ($current_page - 1) * $rows_per_page;
+if (isset($_SESSION['ma_quyen']) && $_SESSION['ma_quyen'] == 'Q1') {
+    // --- Tìm dữ liệu tài khoản ---
+    $search_result = isset($_GET['search']) ? trim($_GET['search']) : '';
+    $where_search = '';
+    if ($search_result != '') {
+        $where_search = "WHERE Ten_dang_nhap LIKE '%$search_result%'";
+    }
 
-// Lấy dữ liệu để hiển thị
-$query_to_show = "
+    // Lấy dữ liệu để hiển thị
+    $query_to_show = "
 SELECT tk.Ten_dang_nhap,
        tk.Mat_khau,
        tk.Ma_quyen,
@@ -73,11 +73,55 @@ $where_search
 ORDER BY tk.Ngay_tao ASC
 LIMIT $start, $rows_per_page
 ";
+} else {
+    $search_result = isset($_GET['search']) ? trim($_GET['search']) : '';
+    $where_search = "WHERE tk.Ma_quyen = 'Q3'";  // điều kiện cố định
+
+    if ($search_result !== '') {
+        $search = mysqli_real_escape_string($conn, $search_result);
+
+        // bổ sung điều kiện search
+        $where_search .= "
+        AND (
+            tk.Ten_dang_nhap LIKE '%$search%' 
+            OR tk.Ma_quyen LIKE '%$search%'
+        )
+    ";
+    }
+    $query_to_show = "
+SELECT tk.Ten_dang_nhap,
+       tk.Mat_khau,
+       tk.Ma_quyen,
+       q.Ten_quyen,
+       tk.Ma_nhan_vien,
+       nv.Ten_nhan_vien,
+       tk.Ma_khach_hang,
+       kh.Ten_khach_hang,
+       tk.Trang_thai,
+       tk.Ngay_tao
+FROM tai_khoan tk
+LEFT JOIN nhan_vien nv ON tk.Ma_nhan_vien = nv.Ma_nhan_vien
+LEFT JOIN khach_hang kh ON tk.Ma_khach_hang = kh.Ma_khach_hang
+LEFT JOIN quyen q ON tk.Ma_quyen = q.Ma_quyen
+$where_search
+ORDER BY tk.Ngay_tao ASC
+LIMIT $start, $rows_per_page
+";
+}
+
+
 
 $result_to_show = mysqli_query($conn, $query_to_show);
 
 // Lấy tổng số dòng để tính tổng số trang
-$query_count = "SELECT * FROM tai_khoan $where_search";
+$query_count = "
+SELECT COUNT(*) AS total
+FROM tai_khoan tk
+LEFT JOIN nhan_vien nv ON tk.Ma_nhan_vien = nv.Ma_nhan_vien
+LEFT JOIN khach_hang kh ON tk.Ma_khach_hang = kh.Ma_khach_hang
+LEFT JOIN quyen q ON tk.Ma_quyen = q.Ma_quyen
+$where_search
+";
 $result_count = mysqli_query($conn, $query_count);
 $total_rows = mysqli_num_rows($result_count);
 $total_pages = ceil($total_rows / $rows_per_page);
