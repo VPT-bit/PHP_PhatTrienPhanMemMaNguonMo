@@ -122,6 +122,21 @@
                 </div>
             </div>
         </li>
+        <!-- Phân quyền và tài khoản -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAccount_Authorization"
+                aria-expanded="true" aria-controls="collapseAccount_Authorization">
+                <i class="fas fa-fw fa-folder"></i>
+                <span>Tài khoản khách hàng</span>
+            </a>
+            <div id="collapseAccount_Authorization" class="collapse" aria-labelledby="headingAccount_Authorization"
+                data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Danh sách tài khoản:</h6>
+                    <a class="collapse-item" href="index_admin.php?page=list_account">Danh sách tài khoản</a>
+                </div>
+            </div>
+        </li>
     <?php endif; ?>
 
     <!-- Divider -->

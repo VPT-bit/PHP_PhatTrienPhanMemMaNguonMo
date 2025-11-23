@@ -97,8 +97,12 @@ $total_pages = ceil($total_rows / $rows_per_page);
         </form>
         <div class="row">
             <div class="col">
-                <a href="index_admin.php?page=add_account_customer" class="btn btn-success">Thêm tài khoản khách hàng</a>
-                <a href="index_admin.php?page=add_account_employee" class="btn btn-success">Thêm tài khoản nhân viên</a>
+                <?php if (isset($_SESSION['ma_quyen']) && $_SESSION['ma_quyen'] == 'Q1'): ?>
+                    <a href="index_admin.php?page=add_account_customer" class="btn btn-success">Thêm tài khoản khách hàng</a>
+                    <a href="index_admin.php?page=add_account_employee" class="btn btn-success">Thêm tài khoản nhân viên</a>
+                <?php elseif (isset($_SESSION['ma_quyen']) && $_SESSION['ma_quyen'] == 'Q2'): ?>
+                    <a href="index_admin.php?page=add_account_customer" class="btn btn-success">Thêm tài khoản khách hàng</a>
+                <?php endif; ?>
             </div>
         </div>
 
@@ -115,7 +119,9 @@ $total_pages = ceil($total_rows / $rows_per_page);
                         <th>Mã người dùng</th>
                         <th>Trạng thái</th>
                         <th>Ngày tạo</th>
-                        <th>Hành động</th>
+                        <?php if (isset($_SESSION['ma_quyen']) && $_SESSION['ma_quyen'] == 'Q1'): ?>
+                            <th>Hành động</th>
+                        <?php endif; ?>
                     </tr>
                 </thead>
                 <tbody>
@@ -138,7 +144,6 @@ $total_pages = ceil($total_rows / $rows_per_page);
                                 }
                                 ?>
                             </td>
-
                             <td>
                                 <?php if ($row['Trang_thai'] == 1): ?>
                                     <p class='text-success'>Kích hoạt</p>
@@ -147,12 +152,15 @@ $total_pages = ceil($total_rows / $rows_per_page);
                                 <?php endif; ?>
                             </td>
                             <td><?php echo $row['Ngay_tao']; ?></td>
+
                             <td>
-                                <a href="index_admin.php?page=edit_account&id=<?php echo $row['Ten_dang_nhap']; ?>" class="btn btn-sm btn-warning">Sửa</a>
-                                <?php if ($row['Trang_thai'] == 1): ?>
-                                    <a href="index_admin.php?page=list_account&Ten_dang_nhap=<?php echo $row['Ten_dang_nhap']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn khoá tài khoản này?')">Khoá</a>
-                                <?php else: ?>
-                                    <a href="index_admin.php?page=list_account&Ten_dang_nhap=<?php echo $row['Ten_dang_nhap']; ?>" class="btn btn-sm btn-success" onclick="return confirm('Bạn có chắc muốn mở tài khoản này?')">Mở</a>
+                                <?php if (isset($_SESSION['ma_quyen']) && $_SESSION['ma_quyen'] == 'Q1'): ?>
+                                    <a href="index_admin.php?page=edit_account&id=<?php echo $row['Ten_dang_nhap']; ?>" class="btn btn-sm btn-warning">Sửa</a>
+                                    <?php if ($row['Trang_thai'] == 1): ?>
+                                        <a href="index_admin.php?page=list_account&Ten_dang_nhap=<?php echo $row['Ten_dang_nhap']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn khoá tài khoản này?')">Khoá</a>
+                                    <?php else: ?>
+                                        <a href="index_admin.php?page=list_account&Ten_dang_nhap=<?php echo $row['Ten_dang_nhap']; ?>" class="btn btn-sm btn-success" onclick="return confirm('Bạn có chắc muốn mở tài khoản này?')">Mở</a>
+                                    <?php endif; ?>
                                 <?php endif; ?>
                             </td>
                         </tr>

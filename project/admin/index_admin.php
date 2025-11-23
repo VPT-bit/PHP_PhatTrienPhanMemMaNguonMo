@@ -39,7 +39,9 @@ $isValidPage = isset($pages[$page]) && file_exists($pages[$page]);
 $q2_allowed_pages = [
   'list_bill',
   'list_bill_detail',
-  'add_bill'
+  'add_bill',
+  'list_account',
+  'add_account_customer'
 ];
 
 // Kiểm tra đã đăng nhập chưa
