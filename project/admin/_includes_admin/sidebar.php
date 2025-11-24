@@ -19,3 +19,5 @@
 <li><strong>Tài khoản & quyền</strong></li>
 <li><a href="index_admin.php?page=list_authorization">Danh sách quyền</a></li>
 <li><a href="index_admin.php?page=list_account">Danh sách tài khoản</a></li>
+
+<li><a href="../user/logout.php">Đăng xuất </a></li>
