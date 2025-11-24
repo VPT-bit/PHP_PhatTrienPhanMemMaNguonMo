@@ -34,6 +34,7 @@ if (isset($_GET['ajax'])) {
                 "label" => $row['Ten_san_pham'],
                 "value" => $row['Ten_san_pham'],
                 "SoLuong" => $row['So_luong']
+
             );
         }
     } elseif ($type === 'check_exist') {
