@@ -52,19 +52,19 @@ if (!isset($_SESSION['username'])) {
 
 // Kiểm tra quyền
 if (!isset($_SESSION['ma_quyen'])) {
-    include('./_includes/index_404.php');
+    include('./_includes_admin/index_404.php');
     exit();
 }
 
 if ($_SESSION['ma_quyen'] == 'Q2') {
     // Q2 chỉ được phép truy cập các page trong danh sách
     if (!in_array($page, $q2_allowed_pages)) {
-        include('./_includes/index_404.php');
+        include('./_includes_admin/index_404.php');
         exit();
     }
 } elseif ($_SESSION['ma_quyen'] != 'Q1') {
     // Những quyền khác ngoài Q1 và Q2 → 404
-    include('./_includes/index_404.php');
+    include('./_includes_admin/index_404.php');
     exit();
 }
 
