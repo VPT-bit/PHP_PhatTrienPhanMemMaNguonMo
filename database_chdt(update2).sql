@@ -72,7 +72,7 @@ CREATE TABLE san_pham (
 INSERT INTO san_pham VALUES
 ('SP1','Samsung Galaxy S23','L1',50,25000000,'NCC1','Điện thoại cao cấp Samsung','Samsung Galaxy S23.webp',NOW()),
 ('SP2','iPhone 15','L1',30,30000000,'NCC2','Điện thoại Apple mới nhất','iPhone 15.jpg',NOW()),
-('SP3','Sony WH-5000XM5','L3',40,7000000,'NCC3','Tai nghe chống ồn Sony','Sony WH-5000XM5.png',NOW()),
+('SP3','Sony WH-5000XM5','L3',40,7000000,'NCC3','Tai nghe chống ồn Sony','Sony WH-1000XM5.png',NOW()),
 ('SP4','MacBook Pro 16','L2',20,55000000,'NCC2','Laptop cao cấp Apple','MacBook Pro 16.jpg',NOW()),
 ('SP5','Sony Bravia 55inch','L4',50,22000000,'NCC3','Tivi 4K Sony','Sony Bravia 55inch.webp',NOW()),
 ('SP6','Xiaomi 13 Pro','L1',60,19000000,'NCC4','Điện thoại chụp ảnh đẹp','Xiaomi 13 Pro.jpg',NOW()),
@@ -192,7 +192,7 @@ CREATE TABLE tai_khoan (
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 INSERT INTO tai_khoan VALUES
-('admin', '$2y$50$ap.471E4KMWgqLhyQc/o1OV0vgjP.u7zisKhyQae5M8DGHXK4fYZy', 'Q1', 'NV691b0e11465b5', NULL, 1, NOW()),
+('admin', '$2y$10$lcuJSpEabJBwA0knmE0NCO6D.TQHDXIfUPUAs/nyiTbO7/pzTFXTi', 'Q1', 'NV691b0e11465b5', NULL, 1, NOW()),
 ('kh', '$2y$50$CorM3VxE6wGssOdNoHfPjOWbbhDbo79/ttSLYzyDD0wLdugf8.ms6', 'Q3', NULL, 'KH691b06a2', 1, NOW()),
 ('nv', '$2y$50$r5ioJ6pQfOFkTMys3a3TaudE4cx06SMa0GUbrmqhbs/PnP.dt.2OS', 'Q2', 'NV691b067a', NULL, 1, NOW());
 
