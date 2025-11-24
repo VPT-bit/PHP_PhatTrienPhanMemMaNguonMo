@@ -1,2 +1,2 @@
- <h1>Admin Panel</h1>
- <h2>Manage your website</h2>
+ <h1>3TL</h1>
+ <h2>Cửa hàng điện tử</h2>

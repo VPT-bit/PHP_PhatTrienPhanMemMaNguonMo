@@ -48,89 +48,88 @@ $total_pages = ceil($total_rows / $rows_per_page);
 
 ?>
 
-<div class="card shadow mb-4">
-    <div class="card-header py-3 d-flex justify-content-between align-items-center flex-wrap">
-        <h6 class="m-0 font-weight-bold text-primary">Danh sách quyền</h6>
-        <form action="index_admin.php" method="get">
-            <input type="hidden" name="page" value="list_authorization">
-            <!-- Input tìm kiếm -->
-            <div class="input-group mb-3" style="max-width: 400px; margin: 0 auto;">
-                <input type="text" name="search" class="form-control" placeholder="Tìm tên quyền..." value="<?php echo trim($search_result); ?>">
-                <button class="btn btn-primary" type="submit">Tìm</button>
-            </div>
-        </form>
-        <!-- <a href="index_admin.php?page=add_authorization" class="btn btn-success">Thêm quyền</a> -->
-    </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered">
-                <thead>
+
+<div class="card-header py-3 d-flex justify-content-between align-items-center flex-wrap">
+    <h6 class="m-0 font-weight-bold text-primary">Danh sách quyền</h6>
+    <form action="index_admin.php" method="get">
+        <input type="hidden" name="page" value="list_authorization">
+        <!-- Input tìm kiếm -->
+        <div class="input-group mb-3" style="max-width: 400px; margin: 0 auto;">
+            <input type="text" name="search" class="form-control" placeholder="Tìm tên quyền..." value="<?php echo trim($search_result); ?>">
+            <button class="btn btn-primary" type="submit">Tìm</button>
+        </div>
+    </form>
+    <!-- <a href="index_admin.php?page=add_authorization" class="btn btn-success">Thêm quyền</a> -->
+</div>
+<div class="card-body">
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Mã quyền</th>
+                    <th>Tên quyền</th>
+                    <th>Mô tả</th>
+                    <!-- <th>Hành động</th> -->
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $i = $start + 1;
+                while ($row = mysqli_fetch_assoc($result_to_show)) {
+                ?>
                     <tr>
-                        <th>STT</th>
-                        <th>Mã quyền</th>
-                        <th>Tên quyền</th>
-                        <th>Mô tả</th>
-                        <!-- <th>Hành động</th> -->
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    $i = $start + 1;
-                    while ($row = mysqli_fetch_assoc($result_to_show)) {
-                    ?>
-                        <tr>
-                            <td><?php echo $i; ?></td>
-                            <td><?php echo $row['Ma_quyen']; ?></td>
-                            <td><?php echo $row['Ten_quyen']; ?></td>
-                            <td><?php echo $row['Mo_ta']; ?></td>
-                            <!-- <td>
+                        <td><?php echo $i; ?></td>
+                        <td><?php echo $row['Ma_quyen']; ?></td>
+                        <td><?php echo $row['Ten_quyen']; ?></td>
+                        <td><?php echo $row['Mo_ta']; ?></td>
+                        <!-- <td>
                                 <a href="index_admin.php?page=edit_authorization&id=<?php echo $row['Ma_quyen']; ?>" class="btn btn-sm btn-warning">Sửa</a>
                                 <a href="index_admin.php?page=list_authorization&Ma_quyen=<?php echo $row['Ma_quyen']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn xoá quyền này?')">Xoá</a>
                             </td> -->
-                        </tr>
+                    </tr>
+                <?php
+                    $i++;
+                } ?>
+            </tbody>
+        </table>
+        <!-- Phân trang với Bootstrap -->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+
+                <!-- Nút Previous -->
+                <li class="page-item <?php if ($current_page <= 1) echo 'disabled'; ?>">
                     <?php
-                        $i++;
-                    } ?>
-                </tbody>
-            </table>
-            <!-- Phân trang với Bootstrap -->
-            <nav aria-label="Page navigation example">
-                <ul class="pagination justify-content-center">
-
-                    <!-- Nút Previous -->
-                    <li class="page-item <?php if ($current_page <= 1) echo 'disabled'; ?>">
-                        <?php
-                        $prev_page = $current_page - 1;
-                        $prev_link = "index_admin.php?page=list_authorization&page_num=$prev_page";
-                        if ($search_result != '') $prev_link .= "&search=" . $search_result;
-                        ?>
-                        <a class="page-link" href="<?php echo $prev_link; ?>" tabindex="-1">Trước</a>
-                    </li>
-
-                    <!-- Các số trang -->
-                    <?php
-                    for ($p = 1; $p <= $total_pages; $p++) {
-                        $link = "index_admin.php?page=list_authorization&page_num=$p";
-                        if ($search_result != '') $link .= "&search=" . $search_result;
-
-                        $active = ($p == $current_page) ? 'active' : '';
-                        echo '<li class="page-item ' . $active . '"><a class="page-link" href="' . $link . '">' . $p . '</a></li>';
-                    }
+                    $prev_page = $current_page - 1;
+                    $prev_link = "index_admin.php?page=list_authorization&page_num=$prev_page";
+                    if ($search_result != '') $prev_link .= "&search=" . $search_result;
                     ?>
+                    <a class="page-link" href="<?php echo $prev_link; ?>" tabindex="-1">Trước</a>
+                </li>
 
-                    <!-- Nút Next -->
-                    <li class="page-item <?php if ($current_page >= $total_pages) echo 'disabled'; ?>">
-                        <?php
-                        $next_page = $current_page + 1;
-                        $next_link = "index_admin.php?page=list_authorization&page_num=$next_page";
-                        if ($search_result != '') $next_link .= "&search=" . $search_result;
-                        ?>
-                        <a class="page-link" href="<?php echo $next_link; ?>">Sau</a>
-                    </li>
+                <!-- Các số trang -->
+                <?php
+                for ($p = 1; $p <= $total_pages; $p++) {
+                    $link = "index_admin.php?page=list_authorization&page_num=$p";
+                    if ($search_result != '') $link .= "&search=" . $search_result;
 
-                </ul>
-            </nav>
+                    $active = ($p == $current_page) ? 'active' : '';
+                    echo '<li class="page-item ' . $active . '"><a class="page-link" href="' . $link . '">' . $p . '</a></li>';
+                }
+                ?>
 
-        </div>
+                <!-- Nút Next -->
+                <li class="page-item <?php if ($current_page >= $total_pages) echo 'disabled'; ?>">
+                    <?php
+                    $next_page = $current_page + 1;
+                    $next_link = "index_admin.php?page=list_authorization&page_num=$next_page";
+                    if ($search_result != '') $next_link .= "&search=" . $search_result;
+                    ?>
+                    <a class="page-link" href="<?php echo $next_link; ?>">Sau</a>
+                </li>
+
+            </ul>
+        </nav>
+
     </div>
 </div>

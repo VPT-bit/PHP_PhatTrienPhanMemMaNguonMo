@@ -128,131 +128,130 @@ $total_pages = ceil($total_rows / $rows_per_page);
 
 ?>
 
-<div class="card shadow mb-4">
-    <div class="card-header py-3 d-flex justify-content-between align-items-center flex-wrap">
-        <h6 class="m-0 font-weight-bold text-primary">Danh sách tài khoản</h6>
-        <form action="index_admin.php" method="get">
-            <input type="hidden" name="page" value="list_account">
-            <!-- Input tìm kiếm -->
-            <div class="input-group mb-3" style="max-width: 400px; margin: 0 auto;">
-                <input type="text" name="search" class="form-control" placeholder="Tìm tên đăng nhập..." value="<?php echo trim($search_result); ?>">
-                <button class="btn btn-primary" type="submit">Tìm</button>
-            </div>
-        </form>
-        <div class="row">
-            <div class="col">
-                <?php if (isset($_SESSION['ma_quyen']) && $_SESSION['ma_quyen'] == 'Q1'): ?>
-                    <a href="index_admin.php?page=add_account_customer" class="btn btn-success">Thêm tài khoản khách hàng</a>
-                    <a href="index_admin.php?page=add_account_employee" class="btn btn-success">Thêm tài khoản nhân viên</a>
-                <?php elseif (isset($_SESSION['ma_quyen']) && $_SESSION['ma_quyen'] == 'Q2'): ?>
-                    <a href="index_admin.php?page=add_account_customer" class="btn btn-success">Thêm tài khoản khách hàng</a>
-                <?php endif; ?>
-            </div>
-        </div>
 
+<div class="card-header py-3 d-flex justify-content-between align-items-center flex-wrap">
+    <h6 class="m-0 font-weight-bold text-primary">Danh sách tài khoản</h6>
+    <form action="index_admin.php" method="get">
+        <input type="hidden" name="page" value="list_account">
+        <!-- Input tìm kiếm -->
+        <div class="input-group mb-3" style="max-width: 400px; margin: 0 auto;">
+            <input type="text" name="search" class="form-control" placeholder="Tìm tên đăng nhập..." value="<?php echo trim($search_result); ?>">
+            <button class="btn btn-primary" type="submit">Tìm</button>
+        </div>
+    </form>
+    <div class="row">
+        <div class="col">
+            <?php if (isset($_SESSION['ma_quyen']) && $_SESSION['ma_quyen'] == 'Q1'): ?>
+                <a href="index_admin.php?page=add_account_customer" class="btn btn-success">Thêm tài khoản khách hàng</a>
+                <a href="index_admin.php?page=add_account_employee" class="btn btn-success">Thêm tài khoản nhân viên</a>
+            <?php elseif (isset($_SESSION['ma_quyen']) && $_SESSION['ma_quyen'] == 'Q2'): ?>
+                <a href="index_admin.php?page=add_account_customer" class="btn btn-success">Thêm tài khoản khách hàng</a>
+            <?php endif; ?>
+        </div>
     </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered">
-                <thead>
+
+</div>
+<div class="card-body">
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Tên đăng nhập</th>
+                    <th>Mật khẩu</th>
+                    <th>Mã quyền</th>
+                    <th>Mã người dùng</th>
+                    <th>Trạng thái</th>
+                    <th>Ngày tạo</th>
+                    <?php if (isset($_SESSION['ma_quyen']) && $_SESSION['ma_quyen'] == 'Q1'): ?>
+                        <th>Hành động</th>
+                    <?php endif; ?>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $i = $start + 1;
+                while ($row = mysqli_fetch_assoc($result_to_show)) {
+                ?>
                     <tr>
-                        <th>STT</th>
-                        <th>Tên đăng nhập</th>
-                        <th>Mật khẩu</th>
-                        <th>Mã quyền</th>
-                        <th>Mã người dùng</th>
-                        <th>Trạng thái</th>
-                        <th>Ngày tạo</th>
-                        <?php if (isset($_SESSION['ma_quyen']) && $_SESSION['ma_quyen'] == 'Q1'): ?>
-                            <th>Hành động</th>
-                        <?php endif; ?>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    $i = $start + 1;
-                    while ($row = mysqli_fetch_assoc($result_to_show)) {
-                    ?>
-                        <tr>
-                            <td><?php echo $i; ?></td>
-                            <td><?php echo $row['Ten_dang_nhap']; ?></td>
-                            <td class="description"><?php echo $row['Mat_khau']; ?></td>
-                            <td><?php echo $row['Ma_quyen'] . " (" . $row['Ten_quyen'] . ")"; ?></td>
+                        <td><?php echo $i; ?></td>
+                        <td><?php echo $row['Ten_dang_nhap']; ?></td>
+                        <td class="description"><?php echo $row['Mat_khau']; ?></td>
+                        <td><?php echo $row['Ma_quyen'] . " (" . $row['Ten_quyen'] . ")"; ?></td>
 
-                            <td>
-                                <?php
-                                if ($row['Ma_nhan_vien'] !== NULL) {
-                                    echo $row['Ma_nhan_vien'] . " (" . $row['Ten_nhan_vien'] . ")";
-                                } else {
-                                    echo $row['Ma_khach_hang'] . " (" . $row['Ten_khach_hang'] . ")";
-                                }
-                                ?>
-                            </td>
-                            <td>
+                        <td>
+                            <?php
+                            if ($row['Ma_nhan_vien'] !== NULL) {
+                                echo $row['Ma_nhan_vien'] . " (" . $row['Ten_nhan_vien'] . ")";
+                            } else {
+                                echo $row['Ma_khach_hang'] . " (" . $row['Ten_khach_hang'] . ")";
+                            }
+                            ?>
+                        </td>
+                        <td>
+                            <?php if ($row['Trang_thai'] == 1): ?>
+                                <p class='text-success'>Kích hoạt</p>
+                            <?php else: ?>
+                                <p class='text-danger'>Bị khoá</p>
+                            <?php endif; ?>
+                        </td>
+                        <td><?php echo $row['Ngay_tao']; ?></td>
+
+                        <td>
+                            <?php if (isset($_SESSION['ma_quyen']) && $_SESSION['ma_quyen'] == 'Q1'): ?>
+                                <a href="index_admin.php?page=edit_account&id=<?php echo $row['Ten_dang_nhap']; ?>" class="btn btn-sm btn-warning">Sửa</a>
                                 <?php if ($row['Trang_thai'] == 1): ?>
-                                    <p class='text-success'>Kích hoạt</p>
+                                    <a href="index_admin.php?page=list_account&Ten_dang_nhap=<?php echo $row['Ten_dang_nhap']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn khoá tài khoản này?')">Khoá</a>
                                 <?php else: ?>
-                                    <p class='text-danger'>Bị khoá</p>
+                                    <a href="index_admin.php?page=list_account&Ten_dang_nhap=<?php echo $row['Ten_dang_nhap']; ?>" class="btn btn-sm btn-success" onclick="return confirm('Bạn có chắc muốn mở tài khoản này?')">Mở</a>
                                 <?php endif; ?>
-                            </td>
-                            <td><?php echo $row['Ngay_tao']; ?></td>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php
+                    $i++;
+                } ?>
 
-                            <td>
-                                <?php if (isset($_SESSION['ma_quyen']) && $_SESSION['ma_quyen'] == 'Q1'): ?>
-                                    <a href="index_admin.php?page=edit_account&id=<?php echo $row['Ten_dang_nhap']; ?>" class="btn btn-sm btn-warning">Sửa</a>
-                                    <?php if ($row['Trang_thai'] == 1): ?>
-                                        <a href="index_admin.php?page=list_account&Ten_dang_nhap=<?php echo $row['Ten_dang_nhap']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn khoá tài khoản này?')">Khoá</a>
-                                    <?php else: ?>
-                                        <a href="index_admin.php?page=list_account&Ten_dang_nhap=<?php echo $row['Ten_dang_nhap']; ?>" class="btn btn-sm btn-success" onclick="return confirm('Bạn có chắc muốn mở tài khoản này?')">Mở</a>
-                                    <?php endif; ?>
-                                <?php endif; ?>
-                            </td>
-                        </tr>
+            </tbody>
+        </table>
+
+        <!-- Phân trang với Bootstrap -->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+
+                <!-- Nút Previous -->
+                <li class="page-item <?php if ($current_page <= 1) echo 'disabled'; ?>">
                     <?php
-                        $i++;
-                    } ?>
-
-                </tbody>
-            </table>
-
-            <!-- Phân trang với Bootstrap -->
-            <nav aria-label="Page navigation example">
-                <ul class="pagination justify-content-center">
-
-                    <!-- Nút Previous -->
-                    <li class="page-item <?php if ($current_page <= 1) echo 'disabled'; ?>">
-                        <?php
-                        $prev_page = $current_page - 1;
-                        $prev_link = "index_admin.php?page=list_account&page_num=$prev_page";
-                        if ($search_result != '') $prev_link .= "&search=" . $search_result;
-                        ?>
-                        <a class="page-link" href="<?php echo $prev_link; ?>" tabindex="-1">Trước</a>
-                    </li>
-
-                    <!-- Các số trang -->
-                    <?php
-                    for ($p = 1; $p <= $total_pages; $p++) {
-                        $link = "index_admin.php?page=list_account&page_num=$p";
-                        if ($search_result != '') $link .= "&search=" . $search_result;
-
-                        $active = ($p == $current_page) ? 'active' : '';
-                        echo '<li class="page-item ' . $active . '"><a class="page-link" href="' . $link . '">' . $p . '</a></li>';
-                    }
+                    $prev_page = $current_page - 1;
+                    $prev_link = "index_admin.php?page=list_account&page_num=$prev_page";
+                    if ($search_result != '') $prev_link .= "&search=" . $search_result;
                     ?>
+                    <a class="page-link" href="<?php echo $prev_link; ?>" tabindex="-1">Trước</a>
+                </li>
 
-                    <!-- Nút Next -->
-                    <li class="page-item <?php if ($current_page >= $total_pages) echo 'disabled'; ?>">
-                        <?php
-                        $next_page = $current_page + 1;
-                        $next_link = "index_admin.php?page=list_account&page_num=$next_page";
-                        if ($search_result != '') $next_link .= "&search=" . $search_result;
-                        ?>
-                        <a class="page-link" href="<?php echo $next_link; ?>">Sau</a>
-                    </li>
+                <!-- Các số trang -->
+                <?php
+                for ($p = 1; $p <= $total_pages; $p++) {
+                    $link = "index_admin.php?page=list_account&page_num=$p";
+                    if ($search_result != '') $link .= "&search=" . $search_result;
 
-                </ul>
-            </nav>
+                    $active = ($p == $current_page) ? 'active' : '';
+                    echo '<li class="page-item ' . $active . '"><a class="page-link" href="' . $link . '">' . $p . '</a></li>';
+                }
+                ?>
 
-        </div>
+                <!-- Nút Next -->
+                <li class="page-item <?php if ($current_page >= $total_pages) echo 'disabled'; ?>">
+                    <?php
+                    $next_page = $current_page + 1;
+                    $next_link = "index_admin.php?page=list_account&page_num=$next_page";
+                    if ($search_result != '') $next_link .= "&search=" . $search_result;
+                    ?>
+                    <a class="page-link" href="<?php echo $next_link; ?>">Sau</a>
+                </li>
+
+            </ul>
+        </nav>
+
     </div>
 </div>
