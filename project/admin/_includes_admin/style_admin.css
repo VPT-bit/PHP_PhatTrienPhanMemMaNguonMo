@@ -1,0 +1,82 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  color: #000;
+  background: #fff;
+}
+
+/* Header */
+#header {
+  text-align: center;
+  padding: 20px 0;
+  border-bottom: 1px solid #000;
+}
+
+#header h1 {
+  font-size: 24px;
+}
+
+#header h2 {
+  font-size: 16px;
+  color: #555;
+}
+
+/* Container chính */
+#main-container {
+  display: flex;
+  min-height: calc(100vh - 130px);
+  /* trừ header + footer */
+}
+
+/* Sidebar */
+#sidebar {
+  width: 200px;
+  border-right: 1px solid #000;
+  padding: 20px;
+  background: #f0f0f0;
+}
+
+#sidebar ul {
+  list-style: none;
+}
+
+#sidebar li {
+  margin-bottom: 10px;
+}
+
+#sidebar a {
+  text-decoration: none;
+  color: #000;
+  display: block;
+  padding: 5px 0;
+}
+
+/* Content */
+#content {
+  flex: 1;
+  padding: 20px;
+}
+
+#content h1,
+#content h2 {
+  margin-bottom: 10px;
+}
+
+#content p {
+  margin-bottom: 10px;
+}
+
+/* Footer */
+#footer {
+  text-align: center;
+  padding: 10px 0;
+  border-top: 1px solid #000;
+  font-size: 12px;
+  color: #555;
+}

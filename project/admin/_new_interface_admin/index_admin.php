@@ -1,5 +1,6 @@
 <?php
-include_once('_includes_admin/config.php');
+session_start(); // Bắt đầu session
+include('_includes_admin/config.php');
 $page = isset($_GET['page']) ? $_GET['page'] : null;
 // Nếu chưa có page, redirect sang dashboard
 if (!$page) {
@@ -43,6 +44,30 @@ $q2_allowed_pages = [
     'add_account_customer'
 ];
 
+// Kiểm tra đã đăng nhập chưa
+if (!isset($_SESSION['username'])) {
+    include('../../user/login.php'); // chưa đăng nhập → bắt login
+    exit();
+}
+
+// Kiểm tra quyền
+if (!isset($_SESSION['ma_quyen'])) {
+    include('./_includes/index_404.php');
+    exit();
+}
+
+if ($_SESSION['ma_quyen'] == 'Q2') {
+    // Q2 chỉ được phép truy cập các page trong danh sách
+    if (!in_array($page, $q2_allowed_pages)) {
+        include('./_includes/index_404.php');
+        exit();
+    }
+} elseif ($_SESSION['ma_quyen'] != 'Q1') {
+    // Những quyền khác ngoài Q1 và Q2 → 404
+    include('./_includes/index_404.php');
+    exit();
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -51,39 +76,45 @@ $q2_allowed_pages = [
     <meta charset="UTF-8">
     <title>Test</title>
     <link rel="stylesheet" href="_includes_admin/style_admin.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </head>
+<?php if ($isValidPage): ?>
 
-<body>
-    <!-- header (start) -->
-    <div id="header">
-        <?php include('_includes_admin/header.php') ?>
-    </div>
-    <!-- header (end) -->
-
-    <!-- main content (Start) -->
-    <div id="main-container">
-        <!-- Sidebar (start) -->
-        <div id="sidebar">
-            <ul>
-                <?php include('_includes_admin/sidebar.php') ?>
-            </ul>
+    <body>
+        <!-- header (start) -->
+        <div id="header">
+            <?php include('_includes_admin/header.php') ?>
         </div>
-        <!-- sidebar (end) -->
+        <!-- header (end) -->
 
-        <!-- content (start) -->
-        <div id="content">
-            <h1>Welcome to Admin</h1>
-            <p>Use the menu on the left to navigate.</p>
+        <!-- main content (Start) -->
+        <div id="main-container">
+            <!-- Sidebar (start) -->
+            <div id="sidebar">
+                <ul>
+                    <?php include('_includes_admin/sidebar.php') ?>
+                </ul>
+            </div>
+            <!-- sidebar (end) -->
+
+            <!-- content (start) -->
+            <div id="content">
+                <?php include($pages[$page]); ?>
+            </div>
+            <!-- content (end) -->
         </div>
-        <!-- content (end) -->
-    </div>
-    <!-- main content (end) -->
+        <!-- main content (end) -->
 
-    <!-- footer (start) -->
-    <div id="footer">
-        <?php include('_includes_admin/footer.php') ?>
-    </div>
-    <!-- footer (end) -->
-</body>
+        <!-- footer (start) -->
+        <div id="footer">
+            <?php include('_includes_admin/footer.php') ?>
+        </div>
+        <!-- footer (end) -->
+    </body>
+<?php else: ?>
+    <?php include('_includes_admin/index_404.php'); ?>
+
+<?php endif; ?>
 
 </html>
