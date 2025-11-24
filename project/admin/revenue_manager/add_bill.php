@@ -1,5 +1,5 @@
 <?php
-include(__DIR__ . '/../_includes/config.php');
+include('_includes_admin/config.php');
 
 // ============================================
 // KHỞI TẠO MÃ NHÂN VIÊN TRƯỚC (QUAN TRỌNG!)

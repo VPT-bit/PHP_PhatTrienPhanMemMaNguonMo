@@ -75,15 +75,12 @@ if ($_SESSION['ma_quyen'] == 'Q2') {
 <head>
     <meta charset="UTF-8">
     <title>Admin</title>
-    <link rel="stylesheet" href="_includes_admin/style_admin.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-    <!-- Bootstrap core JavaScript-->
-    <script src="../_assets/admin/vendor/jquery/jquery.min.js"></script>
-    <script src="../_assets/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="..\_assets\admin\custom_css\style_admin.css">
+    <link href="../_assets\admin\custom_css\bootstrap_min.css" rel="stylesheet">
 
-    <!-- Core plugin JavaScript-->
-    <script src="../_assets/admin/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="../_assets\admin\custom_js\jquery-3_6_0.min.js"></script>
+    <script src="..\_assets\admin\custom_js\bootstrap_bundle_min.js"></script>
 
     <!-- Nếu có dashboard dùng biểu đồ -->
     <script src="../_assets/admin/custom_js/chart.js"></script>
