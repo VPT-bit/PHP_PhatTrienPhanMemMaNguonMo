@@ -192,9 +192,9 @@ CREATE TABLE tai_khoan (
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 INSERT INTO tai_khoan VALUES
-('admin', '$2y$10$lcuJSpEabJBwA0knmE0NCO6D.TQHDXIfUPUAs/nyiTbO7/pzTFXTi', 'Q1', 'NV691b0e11465b5', NULL, 1, NOW()),
-('kh', '$2y$50$CorM3VxE6wGssOdNoHfPjOWbbhDbo79/ttSLYzyDD0wLdugf8.ms6', 'Q3', NULL, 'KH691b06a2', 1, NOW()),
-('nv', '$2y$50$r5ioJ6pQfOFkTMys3a3TaudE4cx06SMa0GUbrmqhbs/PnP.dt.2OS', 'Q2', 'NV691b067a', NULL, 1, NOW());
+('admin', '$2y$10$BI6BJHBN.2DbpnQ/Qowo4OZ0joSeEzaOeciShgxR5qGyTVATfT5/K', 'Q1', 'NV691b0e11465b5', NULL, 1, NOW()),
+('kh', '$2y$10$T5z9tHBJhn8LNCYK3iEDde1umeHIFteqRy6ApVBf9Emn44IGvNWhK', 'Q3', NULL, 'KH691b06a2', 1, NOW()),
+('nv', '$2y$10$sZ7.N27TZS38gmYzyj1v5eisLSSQPotawK41wtpKbzd3vTU0CoBa6', 'Q2', 'NV691b067a', NULL, 1, NOW());
 
 
 
