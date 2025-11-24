@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple Admin Sidebar</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        display: flex;
+      }
+
+      .sidebar {
+        width: 220px;
+        height: 100vh;
+        background: #1e1e1e;
+        color: #fff;
+        padding: 20px 0;
+        box-sizing: border-box;
+      }
+
+      .sidebar h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 20px;
+      }
+
+      .sidebar a {
+        display: block;
+        padding: 12px 20px;
+        color: #fff;
+        text-decoration: none;
+        font-size: 15px;
+      }
+
+      .sidebar a:hover {
+        background: #333;
+      }
+
+      .content {
+        flex: 1;
+        padding: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar">
+      <h2>Admin</h2>
+      <a href="#">Dashboard</a>
+      <a href="#">Quản lý người dùng</a>
+      <a href="#">Quản lý sản phẩm</a>
+      <a href="#">Cài đặt</a>
+      <a href="#">Đăng xuất</a>
+    </div>
+
+    <div class="content">
+      <h1>Nội dung chính</h1>
+      <p>Đây là khu vực nội dung nằm bên phải sidebar.</p>
+    </div>
+  </body>
+</html>
