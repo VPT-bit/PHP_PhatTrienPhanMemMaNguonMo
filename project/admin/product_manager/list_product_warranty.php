@@ -66,11 +66,11 @@ $total_pages = ceil($total_rows / $rows_per_page);
         <input type="hidden" name="page" value="list_product_warranty">
         <!-- Input tìm kiếm -->
         <div class="input-group mb-3" style="max-width: 400px; margin: 0 auto;">
-            <input type="text" name="search" class="form-control" placeholder="Tìm tên bảo hành..." value="<?php echo trim($search_result); ?>">
+            <input type="text" name="search" class="form-control" placeholder="Tìm mốc thời gian..." value="<?php echo trim($search_result); ?>">
             <button class="btn btn-primary" type="submit">Tìm</button>
         </div>
     </form>
-    <a href="index_admin.php?page=add_product_category" class="btn btn-success">Thêm bảo hành</a>
+    <a href="index_admin.php?page=add_product_warranty" class="btn btn-success">Thêm bảo hành</a>
 </div>
 <div class="card-body">
     <div class="table-responsive">
@@ -80,6 +80,7 @@ $total_pages = ceil($total_rows / $rows_per_page);
                     <th>STT</th>
                     <th>Mã bảo hành</th>
                     <th>Thời gian</th>
+                    <th>Điều kiện</th>
                     <th>Hành động</th>
                 </tr>
             </thead>
@@ -92,8 +93,9 @@ $total_pages = ceil($total_rows / $rows_per_page);
                         <td><?php echo $i; ?></td>
                         <td><?php echo $row['Ma_bao_hanh']; ?></td>
                         <td><?php echo $row['Thoi_gian']; ?></td>
+                        <td><?php echo $row['Dieu_kien']; ?></td>
                         <td>
-                            <a href="index_admin.php?page=edit_product_category&id=<?php echo $row['Ma_bao_hanh']; ?>" class="btn btn-sm btn-warning">Sửa</a>
+                            <a href="index_admin.php?page=edit_product_warranty&id=<?php echo $row['Ma_bao_hanh']; ?>" class="btn btn-sm btn-warning">Sửa</a>
                             <a href="index_admin.php?page=list_product_warranty&Ma_bao_hanh=<?php echo $row['Ma_bao_hanh']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn xoá bảo hành này?')">Xoá</a>
                         </td>
                     </tr>
