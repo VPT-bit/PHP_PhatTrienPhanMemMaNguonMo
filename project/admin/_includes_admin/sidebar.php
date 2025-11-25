@@ -11,6 +11,9 @@
          <li><a href="index_admin.php?page=list_product">Danh sách sản phẩm</a></li>
          <li><a href="index_admin.php?page=list_product_category">Danh sách loại sản phẩm</a></li>
          <li><a href="index_admin.php?page=list_product_brand">Danh sách nhà cung cấp</a></li>
+         <li><a href="index_admin.php?page=list_product_warranty">Danh sách bảo hành</a></li>
+         <li><a href="index_admin.php?page=list_product_origin">Danh sách nguồn</a></li>
+         <li><a href="index_admin.php?page=list_product_color">Danh sách màu sắc</a></li>
 
          <!-- Quản lý người dùng -->
          <li><strong>Quản lý người dùng</strong></li>

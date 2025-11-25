@@ -32,6 +32,15 @@ $pages = [
     'edit_account' => 'authorization_acount_manager/edit_account.php',
     'add_account_customer' => 'authorization_acount_manager/add_account_customer.php',
     'add_account_employee' => 'authorization_acount_manager/add_account_employee.php',
+    'list_product_origin' => 'product_manager/list_product_origin.php',
+    'add_product_origin' => 'product_manager/add_product_origin.php',
+    'edit_product_origin' => 'product_manager/edit_product_origin.php',
+    'list_product_warranty' => 'product_manager/list_product_warranty.php',
+    'add_product_warranty' => 'product_manager/add_product_warranty.php',
+    'edit_product_warranty' => 'product_manager/edit_product_warranty.php',
+    'list_product_color' => 'product_manager/list_product_color.php',
+    'add_product_color' => 'product_manager/add_product_color.php',
+    'edit_product_color' => 'product_manager/edit_product_color.php',
     'dashboard' => 'dashboard_manager/dashboard.php'
 ];
 // Kiểm tra page hợp lệ
