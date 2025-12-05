@@ -143,7 +143,7 @@ if (isset($_POST['submit'])) {
     <div class="row mb-3">
         <div class="col-md-4">
             <label>Số lượng:</label>
-            <input type="number" name="So_luong" class="form-control" value="<?php echo isset($_POST['So_luong']) ? htmlspecialchars($_POST['So_luong']) : ''; ?>">
+            <input type="number" name="So_luong" class="form-control" min="0" onkeypress="if (event.key === '-' || event.key === '+') event.preventDefault();" <?php echo isset($_POST['So_luong']) ? htmlspecialchars($_POST['So_luong']) : ''; ?>">
         </div>
         <div class="col-md-4">
             <label>Đơn giá:</label>

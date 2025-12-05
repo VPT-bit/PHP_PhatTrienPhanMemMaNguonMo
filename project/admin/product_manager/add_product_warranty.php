@@ -39,7 +39,7 @@ if (isset($_POST['submit'])) {
         </div>
         <div class="col-md-12">
             <label>Thời gian:</label>
-            <input type="number" name="Thoi_gian" class="form-control" required value="<?php echo isset($_POST['Thoi_gian']) ? $_POST['Thoi_gian'] : ''; ?>">
+            <input type="number" min="0" onkeypress="if (event.key === '-' || event.key === '+') event.preventDefault();" name="Thoi_gian" class="form-control" required value="<?php echo isset($_POST['Thoi_gian']) ? $_POST['Thoi_gian'] : ''; ?>">
         </div>
         <div class="col-md-12">
             <label>Điều kiện:</label>
